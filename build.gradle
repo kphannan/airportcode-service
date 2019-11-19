@@ -1,0 +1,200 @@
+
+buildscript {
+    ext {
+        lombokVersion      = '1.18.8'
+        junitVersion       = '5.5.2'
+        hamcrestVersion    = '2.2'
+        serenityVersion    = '2.0.83'
+        checkstyleVersion  = '8.26'
+    }
+
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+
+    dependencies {
+        classpath("net.serenity-bdd:serenity-gradle-plugin:${serenityVersion}")
+    }
+}
+
+
+plugins {
+	id 'org.springframework.boot' version '2.2.2.BUILD-SNAPSHOT'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'org.asciidoctor.convert' version '1.5.8'
+	id 'java'
+    id 'jacoco'
+    id 'checkstyle'
+    id 'project-report'
+    id 'build-dashboard'
+    // id 'net.serenity-bdd.aggregator' version "${serenityVersion}"
+}
+
+apply plugin: 'net.serenity-bdd.aggregator'
+
+
+group = 'com.airline'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+targetCompatibility = "${sourceCompatibility}"
+
+configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	jcenter()
+	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
+	maven { url 'https://repo.spring.io/snapshot' }
+}
+
+ext {
+	set('snippetsDir', file("build/generated-snippets"))
+	set('springCloudVersion', "Hoxton.BUILD-SNAPSHOT")
+}
+
+dependencies {
+
+    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
+    implementation 'com.google.guava:guava:28.0-jre'
+
+    // Use JUnit Jupiter API for testing.
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+
+    // Use JUnit Jupiter Engine for testing.
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+
+    // https://mvnrepository.com/artifact/org.hamcrest/hamcrest
+    testImplementation("org.hamcrest:hamcrest:${hamcrestVersion}")
+
+    compileOnly("org.projectlombok:lombok:${lombokVersion}")
+    testImplementation("org.projectlombok:lombok:${lombokVersion}")
+    annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+    testAnnotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+
+    testImplementation("net.serenity-bdd:serenity-core:${serenityVersion}" )
+    testImplementation("net.serenity-bdd:serenity-junit:${serenityVersion}" )
+
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	implementation 'org.liquibase:liquibase-core'
+
+	implementation 'org.springframework.cloud:spring-cloud-starter'
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-zuul'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+	implementation 'org.springframework.cloud:spring-cloud-starter-zipkin'
+	implementation 'org.springframework.data:spring-data-rest-hal-browser'
+
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	runtimeOnly 'mysql:mysql-connector-java'
+
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+test {
+	outputs.dir snippetsDir
+	useJUnitPlatform()
+}
+
+asciidoctor {
+	inputs.dir snippetsDir
+	dependsOn test
+}
+
+
+test {
+    // Use junit platform for unit tests
+    useJUnitPlatform()
+}
+
+
+
+// See this page for options https://reflectoring.io/jacoco/
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.5
+            }
+        }
+
+        rule {
+            limit {
+                counter = 'LINE'
+                value   = 'COVEREDRATIO'
+                minimum = 1.0
+            }
+        }
+
+        rule {
+            enabled = false
+            element = 'CLASS'
+            includes = ['org.gradle.*']
+
+            limit {
+                counter = 'LINE'
+                value = 'TOTALCOUNT'
+                maximum = 0.3
+            }
+        }
+    }
+}
+
+
+
+checkstyle {
+    // assign the latest checkstyle version explicitly
+    // default version is very old, likes 5.9
+    toolVersion = "${checkstyleVersion}"
+    // checkstyle.xml copy from:
+    // https://raw.githubusercontent.com/checkstyle/checkstyle/checkstyle-8.6/src/main/resources/google_checks.xml
+    // the version should be as same as plugin version
+    // configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+}
+// task Checkstyle(type: Checkstyle) {
+//     // source 'src/main/java'
+//     include '**/*.java'
+//     exclude '**/gen/**'
+//     exclude '**/R.java'
+//     exclude '**/BuildConfig.java'
+
+//     // empty classpath
+//     classpath = rootProject.files()
+// }
+
+checkstyleMain {
+    source = 'src/main/java'
+}
+checkstyleTest {
+    source = 'src/test/java'
+}
+
+
