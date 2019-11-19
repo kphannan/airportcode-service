@@ -1,0 +1,43 @@
+server:
+  port: ${port:8100}
+
+##### Spring #####
+spring:
+  application:
+    name: airport-location-service
+
+  profiles:
+    active: ${active_profiles:local}
+
+  cloud:
+    configs:
+      uri: http://localhost:8080
+      enabled: false
+
+  output:
+    ansi:
+      enabled: ALWAYS
+
+##### Rendezvous service (Eureka) #####
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+##### Logging configuration #####
+logging:
+  level:
+    root: INFO
+
+    com:
+      delta: DEBUG
+
+    org:
+      apache: INFO
+
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            # Enable logging of SQL
+            sql: trace
