@@ -1,6 +1,12 @@
 server:
   port: ${port:8100}
 
+datasource:
+  username: root
+  password: root
+  # schema: something
+  # url: 
+
 ##### Spring #####
 spring:
   application:
@@ -18,6 +24,16 @@ spring:
     ansi:
       enabled: ALWAYS
 
+  ## --- DataSource ---
+  # datasource:
+  #   driver-class-name: ${datasource.driver-class-name:"com.mysql.jdbc.Driver"}
+  #   url: ${datasource.url:"jdbc:mysql://localhost:3306/mcap2_dev"}
+  #   username: ${datasource.username}
+  #   password: ${datasource.password}
+  #   hikari:
+  #     maximum-pool-size: ${datasource.maximum-pool-size:5}
+
+
 ##### Rendezvous service (Eureka) #####
 eureka:
   client:
@@ -30,6 +46,7 @@ logging:
     root: INFO
 
     com:
+      airline: DEBUG
       delta: DEBUG
 
     org:
