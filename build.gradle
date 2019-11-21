@@ -104,11 +104,11 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	// implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	// implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	// implementation 'org.liquibase:liquibase-core'
+	implementation 'org.liquibase:liquibase-core'
 
 	implementation 'org.springframework.cloud:spring-cloud-starter'
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
@@ -117,8 +117,8 @@ dependencies {
 	// implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard'
 	// implementation 'org.springframework.cloud:spring-cloud-starter-netflix-zuul'
 	// implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
-	implementation 'org.springframework.cloud:spring-cloud-starter-zipkin'
+	// implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+	// implementation 'org.springframework.cloud:spring-cloud-starter-zipkin'
 	// implementation 'org.springframework.data:spring-data-rest-hal-browser'
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'

@@ -2,10 +2,12 @@ server:
   port: ${port:8100}
 
 datasource:
-  username: root
-  password: root
+  username: sa
+  password: sa
   # schema: something
-  # url: 
+  url: jdbc:h2:mem:testdb;MODE=Mysql;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;
+  driver:
+    classname: org.h2.Driver
 
 ##### Spring #####
 spring:
@@ -24,15 +26,24 @@ spring:
     ansi:
       enabled: ALWAYS
 
+  # liquibase:
+  #   change-log-classpath: classpath:/db/changelog/changelog-master.xml
+
   ## --- DataSource ---
-  # datasource:
+  datasource:
+    driver-class-name: ${datasource.driver.classname}
+    url: ${datasource.url}
+    username: ${datasource.username}
+    password: ${datasource.password}
   #   driver-class-name: ${datasource.driver-class-name:"com.mysql.jdbc.Driver"}
   #   url: ${datasource.url:"jdbc:mysql://localhost:3306/mcap2_dev"}
   #   username: ${datasource.username}
   #   password: ${datasource.password}
   #   hikari:
   #     maximum-pool-size: ${datasource.maximum-pool-size:5}
-
+  # h2:
+  #   console:
+  #     enabled: truel
 
 ##### Rendezvous service (Eureka) #####
 eureka:
@@ -50,7 +61,7 @@ logging:
       delta: DEBUG
 
     org:
-      apache: INFO
+      apache: ERROR
 
       hibernate:
         SQL: DEBUG
@@ -58,3 +69,6 @@ logging:
           descriptor:
             # Enable logging of SQL
             sql: trace
+
+    liquibase: DEBUG
+
