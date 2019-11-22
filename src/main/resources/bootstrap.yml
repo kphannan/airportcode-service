@@ -70,5 +70,5 @@ logging:
             # Enable logging of SQL
             sql: trace
 
-    liquibase: DEBUG
+    liquibase: ERROR
 
