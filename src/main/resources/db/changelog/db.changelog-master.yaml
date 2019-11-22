@@ -9,7 +9,11 @@ databaseChangeLog:
 
   - include:
       relativeToChangelogFile: true
-      file: changes/00002-Load-IATA-airport-codes.yaml
+      file: changes/00003-Load-IATA-airport-codes.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: changes/00004-Load-ICAO-airport-codes.yaml
 
   # - includeAll:
   #     path: changes

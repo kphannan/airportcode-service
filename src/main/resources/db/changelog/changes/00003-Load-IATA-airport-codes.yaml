@@ -1,14 +1,13 @@
 databaseChangeLog:
   - changeSet:
-      id: 00001
+      id: 00003
       author: kevin
       changes:
-        - createTable:
+        - loadData:
             tableName: airport_code
             columns:
               - column:
                   name: iata_code
-                  type: char(3)
-                  constraints:
-                    primaryKey: true
-                    nullable: false
+                  type: string
+            relativeToChangelogFile: true
+            file: data/iata-airport-codes.csv
