@@ -2,8 +2,8 @@ package com.airline.locationservice.controller;
 
 import java.util.List;
 
-import com.airline.locationservice.repository.AirportCode;
-import com.airline.locationservice.repository.AirportCodeRepository;
+import com.airline.locationservice.repository.AirportCodeIcao;
+import com.airline.locationservice.repository.AirportCodeIcaoRepository;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,25 +15,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/airport/iata")
-public class LocationController
+@RequestMapping("/airport/icao")
+public class LocationControllerIcao
 {
-    private final AirportCodeRepository     repository;
+    private final AirportCodeIcaoRepository repository;
 
-    LocationController( AirportCodeRepository repository )
+    LocationControllerIcao( AirportCodeIcaoRepository repository )
     {
         this.repository = repository;
     }
 
 
     @GetMapping("")
-    List<AirportCode> all()
+    List<AirportCodeIcao> all()
     {
         return repository.findAll();
     }
 
     @PostMapping("")
-    AirportCode newAirportCode( @RequestBody AirportCode newAirportCode )
+    AirportCodeIcao newAirportCode( @RequestBody AirportCodeIcao newAirportCode )
     {
         return repository.save( newAirportCode );
     }
@@ -42,7 +42,7 @@ public class LocationController
     // Single item
 
     @GetMapping("/{id}")
-    AirportCode one(@PathVariable String id )
+    AirportCodeIcao one(@PathVariable String id )
     {
         return repository.findById(id)
                          .orElseThrow(() -> new AirportCodeNotFoundException( id ));
@@ -50,16 +50,16 @@ public class LocationController
 
 
     @PutMapping("/{id}")
-    AirportCode replaceAirportCode( @RequestBody AirportCode newAirportCode, @PathVariable String id )
+    AirportCodeIcao replaceAirportCode( @RequestBody AirportCodeIcao newAirportCode, @PathVariable String id )
     {
         return repository.findById(id)
             .map( airportCode -> {
-                airportCode.setIataCode(id);
+                airportCode.setIcaoCode(id);
 
                 return repository.save( airportCode );
             })
             .orElseGet(() -> {
-                newAirportCode.setIataCode( id );
+                newAirportCode.setIcaoCode( id );
                 return repository.save( newAirportCode );
             });
     }

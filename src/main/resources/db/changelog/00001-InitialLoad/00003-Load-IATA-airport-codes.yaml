@@ -4,7 +4,7 @@ databaseChangeLog:
       author: kevin
       changes:
         - loadData:
-            tableName: airport_code
+            tableName: iata_airportcode
             columns:
               - column:
                   name: iata_code

@@ -5,11 +5,12 @@ import javax.persistence.Entity;
 // import javax.persistence.GeneratedValue;
 // import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import lombok.Data;
 
 @Entity
-// @Table( name = "IATA_AIRPORT", schema = "RMA" )
+@Table( name = "IATA_AIRPORTCODE" )
 @Data
 public class AirportCode
 {
@@ -20,9 +21,6 @@ public class AirportCode
     @Id
     @Column( name = "IATA_CODE" )
     private String iataCode;
-
-    // @Column( name = "ICAO_CODE" )
-    // private String icaoCode;
 
     @Override
     public String toString()
