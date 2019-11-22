@@ -2,8 +2,8 @@ package com.airline.locationservice.controller;
 
 import java.util.List;
 
-import com.airline.locationservice.repository.AirportCode;
-import com.airline.locationservice.repository.AirportCodeRepository;
+import com.airline.locationservice.repository.AirportCodeIata;
+import com.airline.locationservice.repository.AirportCodeIataRepository;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,24 +16,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/airport/iata")
-public class LocationController
+public class LocationControllerIata
 {
-    private final AirportCodeRepository     repository;
+    private final AirportCodeIataRepository     repository;
 
-    LocationController( AirportCodeRepository repository )
+    LocationControllerIata( AirportCodeIataRepository repository )
     {
         this.repository = repository;
     }
 
 
     @GetMapping("")
-    List<AirportCode> all()
+    List<AirportCodeIata> all()
     {
         return repository.findAll();
     }
 
     @PostMapping("")
-    AirportCode newAirportCode( @RequestBody AirportCode newAirportCode )
+    AirportCodeIata newAirportCode( @RequestBody AirportCodeIata newAirportCode )
     {
         return repository.save( newAirportCode );
     }
@@ -42,7 +42,7 @@ public class LocationController
     // Single item
 
     @GetMapping("/{id}")
-    AirportCode one(@PathVariable String id )
+    AirportCodeIata one(@PathVariable String id )
     {
         return repository.findById(id)
                          .orElseThrow(() -> new AirportCodeNotFoundException( id ));
@@ -50,7 +50,7 @@ public class LocationController
 
 
     @PutMapping("/{id}")
-    AirportCode replaceAirportCode( @RequestBody AirportCode newAirportCode, @PathVariable String id )
+    AirportCodeIata replaceAirportCode( @RequestBody AirportCodeIata newAirportCode, @PathVariable String id )
     {
         return repository.findById(id)
             .map( airportCode -> {

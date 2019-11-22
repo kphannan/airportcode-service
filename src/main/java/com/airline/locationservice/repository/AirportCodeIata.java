@@ -12,7 +12,7 @@ import lombok.Data;
 @Entity
 @Table( name = "IATA_AIRPORTCODE" )
 @Data
-public class AirportCode
+public class AirportCodeIata
 {
     // @Id
     // @GeneratedValue( strategy = GenerationType.AUTO )
@@ -29,9 +29,9 @@ public class AirportCode
         return iataCode;
     }
 
-    protected AirportCode() {}
+    protected AirportCodeIata() {}
 
-    public AirportCode( String code )
+    public AirportCodeIata( String code )
     {
         iataCode = code;
     }

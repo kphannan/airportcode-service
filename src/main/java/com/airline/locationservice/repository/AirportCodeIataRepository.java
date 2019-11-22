@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 // @NoRepositoryBean
-public interface AirportCodeRepository extends JpaRepository<AirportCode, String> {
+public interface AirportCodeIataRepository extends JpaRepository<AirportCodeIata, String> {
 // public interface AirportCodeRepository extends CrudRepository<AirportCode, String> {
 
     // @Query( "from AirportCode airportCode where airportCode.code = :airport" )

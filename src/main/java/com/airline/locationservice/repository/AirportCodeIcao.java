@@ -19,7 +19,7 @@ public class AirportCodeIcao
     @Override
     public String toString()
     {
-        // return "{IATA airport code: '" + iataCode + "'}";
+        // return "{ICAO airport code: '" + icaoCode + "'}";
         return icaoCode;
     }
 
