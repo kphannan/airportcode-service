@@ -27,8 +27,8 @@ plugins {
 	id 'java'
     id 'jacoco'
     // id 'checkstyle'
-    // id 'project-report'
-    // id 'build-dashboard'
+    id 'project-report'
+    id 'build-dashboard'
     // id 'net.serenity-bdd.aggregator' version "${serenityVersion}"
     id "net.nemerosa.versioning" version "2.9.0"
     id "com.gorylenko.gradle-git-properties" version "2.2.0"
@@ -147,6 +147,7 @@ compileJava {
 
 test {
 	outputs.dir snippetsDir
+    // Use junit platform for unit tests
 	useJUnitPlatform()
 }
 
@@ -154,13 +155,6 @@ asciidoctor {
 	inputs.dir snippetsDir
 	dependsOn test
 }
-
-
-test {
-    // Use junit platform for unit tests
-    useJUnitPlatform()
-}
-
 
 
 // See this page for options https://reflectoring.io/jacoco/
