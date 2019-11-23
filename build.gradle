@@ -31,8 +31,9 @@ plugins {
     id 'project-report'
     id 'build-dashboard'
     // id 'net.serenity-bdd.aggregator' version "${serenityVersion}"
-    id "net.nemerosa.versioning" version "2.9.0"
-    id "com.gorylenko.gradle-git-properties" version "2.2.0"
+    // id "net.nemerosa.versioning" version "2.9.0"
+    // id "net.nemerosa.versioning"
+    // id "com.gorylenko.gradle-git-properties" version "2.2.0"
 	// id 'org.liquibase.gradle' version '2.0.0'
 }
 
@@ -82,6 +83,9 @@ def changeLog = "$projectDir/src/main/resources/db/changelog/db.changelog-master
 
 
 dependencies {
+
+	implementation project( ":core" )
+    // implementation( 'com.airport:airport-core:0.0.1-SNAPSHOT' )
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:28.0-jre'

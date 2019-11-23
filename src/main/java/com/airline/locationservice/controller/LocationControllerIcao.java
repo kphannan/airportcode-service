@@ -1,6 +1,7 @@
 package com.airline.locationservice.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.airline.locationservice.repository.AirportCodeIcao;
 import com.airline.locationservice.repository.AirportCodeIcaoRepository;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.delta.rm.core.location.AirportCode;
+import com.delta.rm.core.location.ICAOAirportCode;
 
 @RestController
 @RequestMapping("/airport/icao")
@@ -27,41 +31,68 @@ public class LocationControllerIcao
 
 
     @GetMapping("")
-    List<AirportCodeIcao> all()
+    List<AirportCode> all()
     {
-        return repository.findAll();
+        List<AirportCodeIcao> result = repository.findAll();
+        List<AirportCode> airports =
+            result.stream().map( icao -> new ICAOAirportCode(icao.getIcaoCode()) )
+                           .collect( Collectors.toList() );
+
+        return airports;
     }
 
+    // @PostMapping("")
+    // AirportCode newAirportCode( @RequestBody ICAOAirportCode newAirportCode )
+    // {
+    //     AirportCodeIcao icao = repository.save( new AirportCodeIcao( newAirportCode.getAirportCode() ));
+
+    //     return new ICAOAirportCode( icao.getIcaoCode() );
+    // }
     @PostMapping("")
-    AirportCodeIcao newAirportCode( @RequestBody AirportCodeIcao newAirportCode )
+    // AirportCodeIcao newAirportCode( @RequestBody AirportCodeIcao newAirportCode )
+    AirportCodeIcao newAirportCode( @RequestBody ICAOAirportCode newAirportCode )
     {
-        return repository.save( newAirportCode );
+        AirportCodeIcao icao = new AirportCodeIcao( newAirportCode.getAirportCode() );
+        return repository.save( icao );
     }
+    // @PostMapping("/validate")
+    // Boolean validateAirportCode( @RequestBody ICAOAirportCode newAirportCode )
+    // {
+    //     System.out.println( newAirportCode );
+    //     // return repository.save( newAirportCode );
+    //     return true;
+    // }
+
+
 
 
     // Single item
 
     @GetMapping("/{id}")
-    AirportCodeIcao one(@PathVariable String id )
+    AirportCode one(@PathVariable String id )
     {
-        return repository.findById(id)
-                         .orElseThrow(() -> new AirportCodeNotFoundException( id ));
+        AirportCodeIcao icao = repository.findById(id)
+                                         .orElseThrow(() -> new AirportCodeNotFoundException( id ));
+
+        return new ICAOAirportCode( icao.getIcaoCode() );
     }
 
 
     @PutMapping("/{id}")
-    AirportCodeIcao replaceAirportCode( @RequestBody AirportCodeIcao newAirportCode, @PathVariable String id )
+    AirportCode replaceAirportCode( @RequestBody ICAOAirportCode newAirportCode, @PathVariable String id )
     {
-        return repository.findById(id)
+        AirportCodeIcao icao =  repository.findById(id)
             .map( airportCode -> {
                 airportCode.setIcaoCode(id);
 
                 return repository.save( airportCode );
             })
             .orElseGet(() -> {
-                newAirportCode.setIcaoCode( id );
-                return repository.save( newAirportCode );
+                return repository.save( new AirportCodeIcao( id ));
             });
+
+        // Map the response to a Domain Object
+        return new ICAOAirportCode( icao.getIcaoCode() );
     }
 
 
