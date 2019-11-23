@@ -6,6 +6,7 @@ buildscript {
         hamcrestVersion    = '2.2'
         serenityVersion    = '2.0.83'
         checkstyleVersion  = '8.26'
+		karateVersion      = '0.9.5.RC4'
     }
 
     repositories {
@@ -93,6 +94,9 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.hamcrest/hamcrest
     testImplementation("org.hamcrest:hamcrest:${hamcrestVersion}")
+
+    testImplementation( "com.intuit.karate:karate-junit5:${karateVersion}" )
+    testImplementation( "com.intuit.karate:karate-apache:${karateVersion}" )
 
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
     testImplementation("org.projectlombok:lombok:${lombokVersion}")
