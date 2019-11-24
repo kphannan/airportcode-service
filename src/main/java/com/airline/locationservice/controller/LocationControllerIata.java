@@ -48,9 +48,11 @@ public class LocationControllerIata
     }
 
     @PostMapping("")
-    AirportCodeIata newAirportCode( @RequestBody IATAAirportCode newAirportCode )
+    AirportCode newAirportCode( @RequestBody IATAAirportCode newAirportCode )
     {
-        return repository.save( new AirportCodeIata( newAirportCode.getAirportCode() ));
+        AirportCodeIata iataDB = repository.save( new AirportCodeIata( newAirportCode.getAirportCode() ));
+
+        return new IATAAirportCode( iataDB.getIataCode() );
     }
     // @PostMapping("/validate")
     // Boolean validateAirportCode( @RequestBody IATAAirportCode newAirportCode )
