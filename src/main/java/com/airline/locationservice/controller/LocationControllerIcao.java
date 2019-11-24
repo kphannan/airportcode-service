@@ -38,18 +38,12 @@ public class LocationControllerIcao
             result.stream().map( icao -> new ICAOAirportCode(icao.getIcaoCode()) )
                            .collect( Collectors.toList() );
 
+        // airports.forEach( System.out::println );
+
         return airports;
     }
 
-    // @PostMapping("")
-    // AirportCode newAirportCode( @RequestBody ICAOAirportCode newAirportCode )
-    // {
-    //     AirportCodeIcao icao = repository.save( new AirportCodeIcao( newAirportCode.getAirportCode() ));
-
-    //     return new ICAOAirportCode( icao.getIcaoCode() );
-    // }
     @PostMapping("")
-    // AirportCodeIcao newAirportCode( @RequestBody AirportCodeIcao newAirportCode )
     AirportCodeIcao newAirportCode( @RequestBody ICAOAirportCode newAirportCode )
     {
         AirportCodeIcao icao = new AirportCodeIcao( newAirportCode.getAirportCode() );
