@@ -1,6 +1,8 @@
 package com.airline.locationservice.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.airline.locationservice.repository.AirportCodeIcao;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 
 import com.delta.rm.core.location.AirportCode;
 import com.delta.rm.core.location.ICAOAirportCode;
@@ -34,20 +38,27 @@ public class LocationControllerIcao
     List<AirportCode> all()
     {
         List<AirportCodeIcao> result = repository.findAll();
+
+        if ( result.isEmpty() )
+        {
+            return new ArrayList<>();
+        }
+
+        // Map the results to Domain Objects rather than DB objects
         List<AirportCode> airports =
             result.stream().map( icao -> new ICAOAirportCode(icao.getIcaoCode()) )
                            .collect( Collectors.toList() );
-
-        // airports.forEach( System.out::println );
 
         return airports;
     }
 
     @PostMapping("")
-    AirportCodeIcao newAirportCode( @RequestBody ICAOAirportCode newAirportCode )
+    ResponseEntity<AirportCode> newAirportCode( @RequestBody ICAOAirportCode newAirportCode )
     {
-        AirportCodeIcao icao = new AirportCodeIcao( newAirportCode.getAirportCode() );
-        return repository.save( icao );
+        AirportCodeIcao icaoDB = repository.save( new AirportCodeIcao( newAirportCode.getAirportCode() ));
+
+        // Return 201 (Created)
+        return new ResponseEntity<>(new ICAOAirportCode( icaoDB.getIcaoCode() ), HttpStatus.CREATED );
     }
     // @PostMapping("/validate")
     // Boolean validateAirportCode( @RequestBody ICAOAirportCode newAirportCode )
@@ -63,37 +74,45 @@ public class LocationControllerIcao
     // Single item
 
     @GetMapping("/{id}")
-    AirportCode one(@PathVariable String id )
+    ResponseEntity<AirportCode> one(@PathVariable String id )
     {
         AirportCodeIcao icao = repository.findById(id)
                                          .orElseThrow(() -> new AirportCodeNotFoundException( id ));
 
-        return new ICAOAirportCode( icao.getIcaoCode() );
+        return new ResponseEntity<>( new ICAOAirportCode( icao.getIcaoCode() ),
+                                     HttpStatus.OK );
     }
 
 
     @PutMapping("/{id}")
-    AirportCode replaceAirportCode( @RequestBody ICAOAirportCode newAirportCode, @PathVariable String id )
+    ResponseEntity<AirportCode> replaceAirportCode( @RequestBody ICAOAirportCode newAirportCode, @PathVariable String id )
     {
-        AirportCodeIcao icao =  repository.findById(id)
-            .map( airportCode -> {
-                airportCode.setIcaoCode(id);
-
-                return repository.save( airportCode );
-            })
-            .orElseGet(() -> {
-                return repository.save( new AirportCodeIcao( id ));
-            });
+        Optional<AirportCodeIcao> icao = repository.findById(id);
+        if ( icao.isPresent() )
+        {
+            return new ResponseEntity<>( new ICAOAirportCode( icao.get().getIcaoCode()), HttpStatus.OK );
+        }
 
         // Map the response to a Domain Object
-        return new ICAOAirportCode( icao.getIcaoCode() );
+        return new ResponseEntity<>( new ICAOAirportCode( repository.save( new AirportCodeIcao( newAirportCode.getAirportCode()) ).getIcaoCode()),
+                                     HttpStatus.CREATED );
     }
 
 
     @DeleteMapping("/{id}")
-    void deleteAirportCode( @PathVariable String id )
+    ResponseEntity<Boolean> deleteAirportCode( @PathVariable String id )
     {
-        repository.deleteById(id);
+        Optional<AirportCodeIcao> icao = repository.findById(id);
+        if ( icao.isPresent() )
+        {
+            // HTTP 204 (No Content)
+            repository.deleteById(id);
+            return new ResponseEntity<>(Boolean.TRUE, HttpStatus.NO_CONTENT);
+        }
+        else
+        {
+            return new ResponseEntity<>( Boolean.FALSE, HttpStatus.NOT_FOUND);
+        }
     }
 
 }

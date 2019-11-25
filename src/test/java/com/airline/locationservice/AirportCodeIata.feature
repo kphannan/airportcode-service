@@ -7,23 +7,19 @@ Background:
 * configure report = { showLog: true, showAllSteps: true }
 
 
-Scenario: Retrieve a list of airport codes
+Scenario: Retrieve a list of IATA airport codes
 # Given url http://localhost:8100/airport/iata
 Given path '/iata'
-# And path 'ATL'
 When method GET
 Then status 200
 And match $ contains { iataAirportCode: 'ATL' }
-# And match $.iataAirportCode contains 'ATL'
-# And match $.iata_code == 'ATL'
 
 
 # ----- (GET) Lookup existing airport -----
-Scenario Outline: Spot check a few airports
+Scenario Outline: Spot check a few IATA airport codes
 Given path '/iata/<id>'
 When method GET
 Then status 200
-# And match $ == {"iataAirportCode":"<id>"}
 And match $.iataAirportCode == "<id>"
 Examples:
 | id  |
@@ -31,7 +27,7 @@ Examples:
 | MSP |
 
 # ----- (GET) lookup non-existent codes -----
-Scenario Outline: Ensure unknown airport codes are not found
+Scenario Outline: Ensure unknown IATA airport codes are not found
 Given path '/iata/<id>'
 When method GET
 Then status 404
@@ -43,7 +39,7 @@ Examples:
 
 
 # ----- Add airport code (POST) -----
-Scenario Outline: Add a new airport code
+Scenario Outline: Add a new IATA airport code
 Given path '/iata'
 And request {iataAirportCode: "<id>" }
 When method POST
@@ -67,7 +63,7 @@ Examples:
 
 
 # ----- Delete -----
-Scenario: Add, then delete an airport code
+Scenario: Add, then delete an IATA airport code
 Given path '/iata'
 And request {iataAirportCode: "SOS" }
 When method POST
