@@ -26,8 +26,11 @@ spring:
     ansi:
       enabled: ALWAYS
 
-  # liquibase:
-  #   change-log-classpath: classpath:/db/changelog/changelog-master.xml
+  jpa:
+    show-sql: true
+      
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
 
   ## --- DataSource ---
   datasource:
@@ -35,12 +38,6 @@ spring:
     url: ${datasource.url}
     username: ${datasource.username}
     password: ${datasource.password}
-  #   driver-class-name: ${datasource.driver-class-name:"com.mysql.jdbc.Driver"}
-  #   url: ${datasource.url:"jdbc:mysql://localhost:3306/mcap2_dev"}
-  #   username: ${datasource.username}
-  #   password: ${datasource.password}
-  #   hikari:
-  #     maximum-pool-size: ${datasource.maximum-pool-size:5}
   # h2:
   #   console:
   #     enabled: truel
@@ -71,4 +68,50 @@ logging:
             sql: trace
 
     liquibase: ERROR
+
+
+
+# Metrics related configurations
+management:
+  endpoint:
+    health:
+      show-details: always
+      status:
+        order: fatal,down,out-of-service,degraded,unknown,up
+        http-mapping:
+          degraded: 242
+          unknown: 242
+          fatal: 503
+          down: 503
+          out-of-service: 503
+
+    liquibase:
+      enabled: true
+
+    metrics:
+      enabled: true
+
+    prometheus:
+      enabled: true
+
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: '*'
+
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# {"git":{"commit":{"time":"2019-11-23T23:41:52Z","id":"5b27927"},"branch":"development"}}
+info:
+  app:
+    name: ${spring.application.name}
+    version: ${project.version}
+    java:
+      version: ${java.version}
+
+
 
