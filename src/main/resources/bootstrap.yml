@@ -67,8 +67,11 @@ logging:
             # Enable logging of SQL
             sql: trace
 
-    liquibase: ERROR
+      springframework:  debug
+        # boot: debug
+        # beans: debug
 
+      liquibase: ERROR
 
 
 # Metrics related configurations
