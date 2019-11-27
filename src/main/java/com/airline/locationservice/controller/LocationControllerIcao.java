@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
-import com.delta.rm.core.location.AirportCode;
-import com.delta.rm.core.location.ICAOAirportCode;
+import com.airline.core.location.AirportCode;
+import com.airline.core.location.ICAOAirportCode;
 
 @RestController
 @RequestMapping("/airport/icao")
