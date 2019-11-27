@@ -1,4 +1,4 @@
-package com.example.democonfigclient;
+package com.airline.locationservice.config;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import lombok.AccessLevel;
  * This is the partner service configuration.
  *
  */
-@ConfigurationProperties(prefix = "partners")
+@ConfigurationProperties(prefix = "partner-services")
 @Component
 @RefreshScope
 @Data

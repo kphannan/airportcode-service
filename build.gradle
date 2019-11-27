@@ -195,6 +195,10 @@ sourceSets {
     integrationTest {
         compileClasspath += main.output + test.output
         runtimeClasspath += main.output + test.output
+        resources {
+            srcDir file('src/integrationTest/java')
+            exclude '**/*.java'
+        }
     }
 }
 
