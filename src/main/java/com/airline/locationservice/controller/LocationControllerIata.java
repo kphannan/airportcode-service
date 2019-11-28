@@ -96,13 +96,20 @@ public class LocationControllerIata
     @PutMapping("/{id}")
     ResponseEntity<AirportCode> replaceAirportCode( @RequestBody AirportCodeIata newAirportCode, @PathVariable String id )
     {
+        System.out.println( ">>=================================================>>");
         Optional<AirportCodeIata> iata = repository.findById(id);
+        if ( iata == null )
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST );;
+
+        System.out.println( "findByID()");
         if ( iata.isPresent() )
         {
+            System.out.println( "isPresent()");
             return new ResponseEntity<>( new IATAAirportCode( iata.get().getIataCode()), HttpStatus.OK );
         }
 
         // Map the response to a Domain Object
+        System.out.println( "save()");
         return new ResponseEntity<>( new IATAAirportCode( repository.save( newAirportCode ).getIataCode()),
                                      HttpStatus.CREATED );
     }

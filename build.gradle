@@ -82,6 +82,13 @@ def changeLog = "$projectDir/src/main/resources/db/changelog/db.changelog-master
 //     }
 // }
 
+configurations {
+    // integrationTest.extendsFrom testImplementation
+    integrationTestImplementation.extendsFrom testImplementation
+    // integrationTestCompile.extendsFrom testCompile
+    // integrationTestRuntime.extendsFrom testRuntime
+}
+
 
 dependencies {
 
@@ -200,11 +207,6 @@ sourceSets {
             exclude '**/*.java'
         }
     }
-}
-
-configurations {
-    integrationTestCompile.extendsFrom testCompile
-    integrationTestRuntime.extendsFrom testRuntime
 }
 
 
