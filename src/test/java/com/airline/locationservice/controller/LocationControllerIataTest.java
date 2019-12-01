@@ -20,6 +20,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import java.util.Optional;
 
 import com.airline.locationservice.repository.AirportCodeIata;
@@ -33,6 +36,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.web.JsonPath;
 // import org.springframework.boot.test.mock.mockito.Mock;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.http.ResponseEntity;
@@ -84,14 +88,73 @@ public class LocationControllerIataTest
         MockHttpServletResponse response = mvc.perform(
             get("/airport/iata/{id}", airportCode.getAirportCode() )
                 .accept( MediaType.APPLICATION_JSON ))
-            // .andExpect().ok()
+            .andExpect(status().isOk() )
+            // .andExpect( jsonPath("$.iataAirportCode", equalTo( "ATL")))
             .andReturn().getResponse();
+
+        // assert the response contains the airport code
+        // assertThat(response)
+        //     .isNotNull()
+        //     .has()
 
         // assertThat(response).ok();
         // LocationControllerIata controller = new LocationControllerIata( mockRepository );
 
         // when( mockRepository.findById("ATL")).thenReturn(null);
         // ResponseEntity<AirportCode> iataResp = controller.one( "ATL" );
+    }
+
+
+    @Test
+    public void getSingleNotKnownIataAirportCode()
+        throws Exception
+    {
+        // IATAAirportCode airportCode = new IATAAirportCode( "ATL" );
+        // assertThat( airportCode ).isNotNull();
+
+        given( repository.findById("MSP")).willReturn( Optional.ofNullable( null ));
+
+        MockHttpServletResponse response = mvc.perform(
+            get("/airport/iata/{id}", "MSP" )
+                .accept( MediaType.APPLICATION_JSON ))
+            .andExpect(status().isNotFound() )
+            .andReturn().getResponse();
+    }
+
+
+
+    @Test
+    public void deleteKnownAirportCode()
+        throws Exception
+    {
+        final String targetAirport = "MSP";
+        // IATAAirportCode airportCode = new IATAAirportCode( "ATL" );
+        // assertThat( airportCode ).isNotNull();
+
+        given( repository.findById(targetAirport)).willReturn( Optional.of( new AirportCodeIata( targetAirport )));
+
+        MockHttpServletResponse response = mvc.perform(
+            delete("/airport/iata/{id}", targetAirport )
+                .accept( MediaType.APPLICATION_JSON ))
+            .andExpect(status().isNoContent() )
+            .andReturn().getResponse();
+    }
+
+    @Test
+    public void deleteAnUnknownAirportCode()
+        throws Exception
+    {
+        final String targetAirport = "MSP";
+        // IATAAirportCode airportCode = new IATAAirportCode( "ATL" );
+        // assertThat( airportCode ).isNotNull();
+
+        given( repository.findById(targetAirport)).willReturn( Optional.ofNullable( null ));
+
+        MockHttpServletResponse response = mvc.perform(
+            delete("/airport/iata/{id}", targetAirport )
+                .accept( MediaType.APPLICATION_JSON ))
+            .andExpect(status().isNotFound() )
+            .andReturn().getResponse();
     }
 }
 

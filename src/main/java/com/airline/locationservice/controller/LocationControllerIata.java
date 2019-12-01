@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import com.airline.locationservice.repository.AirportCodeIata;
 import com.airline.locationservice.repository.AirportCodeIataRepository;
 
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
 import com.airline.core.location.AirportCode;
+import com.airline.core.location.AirportCodeFactory;
 import com.airline.core.location.IATAAirportCode;
 
 
@@ -84,11 +84,19 @@ public class LocationControllerIata
     @GetMapping("/{id}")
     ResponseEntity<AirportCode> one(@PathVariable String id )
     {
-        AirportCodeIata iata = repository.findById(id)
-                                         .orElseThrow(() -> new AirportCodeNotFoundException( id ));
+        Optional<AirportCodeIata> iata = repository.findById(id);
+        if ( iata.isPresent() )
+            return ResponseEntity.ok( AirportCodeFactory.build( iata.get().getIataCode() ));
+        else
+            return ResponseEntity.notFound().build();
 
-        return new ResponseEntity<>( new IATAAirportCode( iata.getIataCode() ),
-                                     HttpStatus.OK );
+
+            // return AirportCodeFactory.build( iata.get().getIataCode() );
+        // AirportCodeIata iata = repository.findById(id)
+        //                                  .orElseThrow(() -> new AirportCodeNotFoundException( id ));
+
+        // return new ResponseEntity<>( new IATAAirportCode( iata.getIataCode() ),
+        //                              HttpStatus.OK );
     }
 
 
@@ -122,12 +130,14 @@ public class LocationControllerIata
         if ( iata.isPresent() )
         {
             // HTTP 204 (No Content)
-            repository.deleteById(id);
-            return new ResponseEntity<>(Boolean.TRUE, HttpStatus.NO_CONTENT);
+            repository.deleteById(id);  // throws IllegalArgumentException if ID not found...
+            // return new ResponseEntity<>(Boolean.TRUE, HttpStatus.NO_CONTENT);
+            return ResponseEntity.noContent().build();
         }
         else
         {
-            return new ResponseEntity<>( Boolean.FALSE, HttpStatus.NOT_FOUND);
+            // return new ResponseEntity<>( Boolean.FALSE, HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
 
