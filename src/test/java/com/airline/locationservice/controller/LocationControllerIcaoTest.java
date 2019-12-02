@@ -36,15 +36,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.airline.locationservice.repository.AirportCodeIata;
-import com.airline.locationservice.repository.AirportCodeIataRepository;
+import com.airline.locationservice.repository.AirportCodeIcao;
+import com.airline.locationservice.repository.AirportCodeIcaoRepository;
 // import com.airline.core.location.AirportCode;
-import com.airline.core.location.IATAAirportCode;
+import com.airline.core.location.ICAOAirportCode;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-// import org.junit.jupiter.api.extension.ExtendWith;
-// import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 // import org.springframework.boot.test.mock.mockito.MockBean;
 // import org.springframework.data.web.JsonPath;
@@ -52,8 +50,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 // import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletResponse;
-// import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-// import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -63,17 +59,17 @@ import org.mockito.Mock;
 
 // @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-public class LocationControllerIataTest
+public class LocationControllerIcaoTest
 {
     // @Autowired
     private MockMvc   mvc;
 
     // mock repository
     @Mock
-    AirportCodeIataRepository repository;
+    AirportCodeIcaoRepository repository;
 
     @InjectMocks
-    LocationControllerIata    service;
+    LocationControllerIcao    service;
     // private AirportCodeRes
 
     @BeforeEach
@@ -87,40 +83,31 @@ public class LocationControllerIataTest
 
 
     @Test
-    public void getSingleKnownIataAirportCode()
+    public void getSingleKnownIcaoAirportCode()
         throws Exception
     {
-        final IATAAirportCode airportCode = new IATAAirportCode( "ATL" );
+        final ICAOAirportCode airportCode = new ICAOAirportCode( "KATL" );
         assertThat( airportCode ).isNotNull();
 
-        // when( repository.findById("ATL")).thenReturn( Optional.of( new AirportCodeIata( airportCode.getAirportCode() )));
-        given( repository.findById("ATL")).willReturn( Optional.of( new AirportCodeIata( airportCode.getAirportCode() )));
+        given( repository.findById("KATL")).willReturn( Optional.of( new AirportCodeIcao( airportCode.getAirportCode() )));
 
         final MockHttpServletResponse response = mvc.perform(
-            get("/airport/iata/{id}", airportCode.getAirportCode() )
+            get("/airport/icao/{id}", airportCode.getAirportCode() )
                 .accept( MediaType.APPLICATION_JSON ))
             .andExpect(status().isOk() )
-            // .andExpect( jsonPath("$.iataAirportCode", equalTo( "ATL")))
+            // .andExpect( jsonPath("$.icaoAirportCode", equalTo( "KATL")))
             .andReturn().getResponse();
-
-        // assert the response contains the airport code
-        // assertThat(response)
-        //     .isNotNull()
-        //     .has()
-
-        // assertThat(response).ok();
-        // LocationControllerIata controller = new LocationControllerIata( mockRepository );
     }
 
 
     @Test
-    public void getSingleNotKnownIataAirportCode()
+    public void getSingleNotKnownIcaoAirportCode()
         throws Exception
     {
-        given( repository.findById("MSP")).willReturn( Optional.ofNullable( null ));
+        given( repository.findById("KMSP")).willReturn( Optional.ofNullable( null ));
 
         final MockHttpServletResponse response = mvc.perform(
-            get("/airport/iata/{id}", "MSP" )
+            get("/airport/icao/{id}", "KMSP" )
                 .accept( MediaType.APPLICATION_JSON ))
             .andExpect(status().isNotFound() )
             .andReturn().getResponse();
@@ -135,7 +122,7 @@ public class LocationControllerIataTest
         given( repository.findAll()).willReturn( Collections.emptyList());
 
         final MockHttpServletResponse response = mvc.perform(
-            get("/airport/iata" ))
+            get("/airport/icao" ))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk() )
             .andExpect(content().json("[]"))
@@ -148,22 +135,22 @@ public class LocationControllerIataTest
     public void getAllAiportCodesHasOneEntry()
         throws Exception
     {
-        final String[] codeStringList = { "NRT" };
+        final String[] codeStringList = { "OERK" };
 
-        // Build a list of IATA airport code objects from the data layer
-        List<AirportCodeIata> listOfIataAirportCodes =
+        // Build a list of ICAO airport code objects from the data layer
+        List<AirportCodeIcao> listOfIcaoAirportCodes =
             Arrays.asList( codeStringList )
                   .stream()
-                  .map( a -> new AirportCodeIata( a ))
+                  .map( a -> new AirportCodeIcao( a ))
                   .collect(Collectors.toList());
         
-        given( repository.findAll()).willReturn( listOfIataAirportCodes );
+        given( repository.findAll()).willReturn( listOfIcaoAirportCodes );
 
         final MockHttpServletResponse response = mvc.perform(
-            get("/airport/iata" ))
+            get("/airport/icao" ))
             .andExpect(status().isOk() )
-            .andExpect(content().json("[{iataAirportCode: \"NRT\"}]"))
-            // .andExpect( jsonPath("$.iataAirportCode", equalTo( "ATL")))
+            .andExpect(content().json("[{icaoAirportCode: \"OERK\"}]"))
+            // .andExpect( jsonPath("$.icaoAirportCode", equalTo( "KATL")))
             .andReturn().getResponse();
     }
 
@@ -173,14 +160,14 @@ public class LocationControllerIataTest
     public void deleteKnownAirportCode()
         throws Exception
     {
-        final String targetAirport = "MSP";
-        // IATAAirportCode airportCode = new IATAAirportCode( "ATL" );
+        final String targetAirport = "KMSP";
+        // ICAOAirportCode airportCode = new ICAOAirportCode( "KATL" );
         // assertThat( airportCode ).isNotNull();
 
-        given( repository.findById(targetAirport)).willReturn( Optional.of( new AirportCodeIata( targetAirport )));
+        given( repository.findById(targetAirport)).willReturn( Optional.of( new AirportCodeIcao( targetAirport )));
 
         final MockHttpServletResponse response = mvc.perform(
-            delete("/airport/iata/{id}", targetAirport )
+            delete("/airport/icao/{id}", targetAirport )
                 .accept( MediaType.APPLICATION_JSON ))
             .andExpect(status().isNoContent() )
             .andReturn().getResponse();
@@ -190,12 +177,12 @@ public class LocationControllerIataTest
     public void deleteAnUnknownAirportCode()
         throws Exception
     {
-        final String targetAirport = "MSP";
+        final String targetAirport = "KMSP";
 
         given( repository.findById(targetAirport)).willReturn( Optional.ofNullable( null ));
 
         final MockHttpServletResponse response = mvc.perform(
-            delete("/airport/iata/{id}", targetAirport )
+            delete("/airport/icao/{id}", targetAirport )
                 .accept( MediaType.APPLICATION_JSON ))
             .andExpect(status().isNotFound() )
             .andReturn().getResponse();
@@ -203,27 +190,27 @@ public class LocationControllerIataTest
 
 
     @Test
-    public void addNewIataAirportCodeYYZ()
+    public void addNewIcaoAirportCodeSYGC()
         throws Exception
     {
-        final IATAAirportCode airportCode = new IATAAirportCode( "ATL" );
+        final ICAOAirportCode airportCode = new ICAOAirportCode( "KATL" );
         assertThat( airportCode ).isNotNull();
 
-        final String json = "{ \"iataAirportCode\": \"YYZ\"}";
+        final String json = "{ \"icaoAirportCode\": \"SYGC\"}";
 
-        AirportCodeIata iata = new AirportCodeIata( "YYZ" );
-        IATAAirportCode iataAirportCode = new IATAAirportCode("YYZ");
+        AirportCodeIcao icao = new AirportCodeIcao( "SYGC" );
+        ICAOAirportCode icaoAirportCode = new ICAOAirportCode("SYGC");
 
-        given( repository.save( iata )).willReturn( iata );
+        given( repository.save( icao )).willReturn( icao );
 
         final MockHttpServletResponse response = mvc.perform(
-            post("/airport/iata" )
-                // .content(iataAirportCode)
+            post("/airport/icao" )
+                // .content(icaoAirportCode)
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept( MediaType.APPLICATION_JSON ))
             .andExpect(status().isCreated() )
-            // .andExpect( jsonPath("$.iataAirportCode", equalTo( "ATL")))
+            // .andExpect( jsonPath("$.icaoAirportCode", equalTo( "KATL")))
             .andReturn().getResponse();
     }
 
@@ -233,27 +220,27 @@ public class LocationControllerIataTest
     public void updateExistingAirportCode()
         throws Exception
     {
-        // final IATAAirportCode airportCode = new IATAAirportCode( "ATL" );
+        // final ICAOAirportCode airportCode = new ICAOAirportCode( "KATL" );
         // assertThat( airportCode ).isNotNull();
 
-        final String json = "{ \"iataAirportCode\": \"YYZ\"}";
+        final String json = "{ \"icaoAirportCode\": \"SYGC\"}";
 
-        AirportCodeIata iata = new AirportCodeIata( "YYZ" );
-        IATAAirportCode iataAirportCode = new IATAAirportCode("YYZ");
+        AirportCodeIcao icao = new AirportCodeIcao( "SYGC" );
+        ICAOAirportCode icaoAirportCode = new ICAOAirportCode("SYGC");
 
-        given( repository.save( iata ))
-            .willReturn( iata );
-        given( repository.findById(iata.getIataCode()))
-            .willReturn( Optional.of( iata ));
+        given( repository.save( icao ))
+            .willReturn( icao );
+        given( repository.findById(icao.getIcaoCode()))
+            .willReturn( Optional.of( icao ));
 
         final MockHttpServletResponse response = mvc.perform(
-            put("/airport/iata/{id}", iataAirportCode.getAirportCode() )
-                // .content(iataAirportCode)
+            put("/airport/icao/{id}", icaoAirportCode.getAirportCode() )
+                // .content(icaoAirportCode)
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept( MediaType.APPLICATION_JSON ))
             .andExpect(status().isOk() )
-            // .andExpect( jsonPath("$.iataAirportCode", equalTo( "ATL")))
+            // .andExpect( jsonPath("$.icaoAirportCode", equalTo( "KATL")))
             .andReturn().getResponse();
     }
 
@@ -261,24 +248,24 @@ public class LocationControllerIataTest
     public void updateNonExistingAirportCodeIsReallyAnAdd()
         throws Exception
     {
-        final String json = "{ \"iataAirportCode\": \"YYZ\"}";
+        final String json = "{ \"icaoAirportCode\": \"SYGC\"}";
 
-        AirportCodeIata iata = new AirportCodeIata( "YYZ" );
-        IATAAirportCode iataAirportCode = new IATAAirportCode("YYZ");
+        AirportCodeIcao icao = new AirportCodeIcao( "SYGC" );
+        ICAOAirportCode icaoAirportCode = new ICAOAirportCode("SYGC");
 
-        given( repository.findById(iata.getIataCode()))
+        given( repository.findById(icao.getIcaoCode()))
             .willReturn( Optional.ofNullable(null));
-        given( repository.save( iata ))
-            .willReturn( iata );
+        given( repository.save( icao ))
+            .willReturn( icao );
 
         final MockHttpServletResponse response = mvc.perform(
-            put("/airport/iata/{id}", iataAirportCode.getAirportCode() )
-                // .content(iataAirportCode)
+            put("/airport/icao/{id}", icaoAirportCode.getAirportCode() )
+                // .content(icaoAirportCode)
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept( MediaType.APPLICATION_JSON ))
             .andExpect(status().isCreated() )
-            // .andExpect( jsonPath("$.iataAirportCode", equalTo( "ATL")))
+            // .andExpect( jsonPath("$.icaoAirportCode", equalTo( "KATL")))
             .andReturn().getResponse();
     }
 
@@ -287,24 +274,24 @@ public class LocationControllerIataTest
     public void updateAirportCodeWrongKeyIsInvalid()
         throws Exception
     {
-        final String json = "{ \"iataAirportCode\": \"LAX\"}";
+        final String json = "{ \"icaoAirportCode\": \"LAX\"}";
 
-        AirportCodeIata iata = new AirportCodeIata( "YYZ" );
-        IATAAirportCode iataAirportCode = new IATAAirportCode("YYZ");
+        AirportCodeIcao icao = new AirportCodeIcao( "SYGC" );
+        ICAOAirportCode icaoAirportCode = new ICAOAirportCode("SYGC");
 
-        given( repository.findById(iata.getIataCode()))
+        given( repository.findById(icao.getIcaoCode()))
             .willReturn( Optional.ofNullable(null));
-        given( repository.save( iata ))
-            .willReturn( iata );
+        given( repository.save( icao ))
+            .willReturn( icao );
 
         final MockHttpServletResponse response = mvc.perform(
-            put("/airport/iata/{id}", iataAirportCode.getAirportCode() )
-                // .content(iataAirportCode)
+            put("/airport/icao/{id}", icaoAirportCode.getAirportCode() )
+                // .content(icaoAirportCode)
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept( MediaType.APPLICATION_JSON ))
             .andExpect(status().isBadRequest() )
-            // .andExpect( jsonPath("$.iataAirportCode", equalTo( "ATL")))
+            // .andExpect( jsonPath("$.icaoAirportCode", equalTo( "KATL")))
             .andReturn().getResponse();
     }
 
