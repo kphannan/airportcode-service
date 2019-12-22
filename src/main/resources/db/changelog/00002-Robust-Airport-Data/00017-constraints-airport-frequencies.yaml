@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 00021
+      author: kevin
+      changes:
+
+        # Airport Frequencies -> Airports
+        - addForeignKeyConstraint:
+            constraintName: fk_airport_freq-airport_id
+
+            baseTableName: airport_frequencies
+            baseColumnNames: airport_ref
+
+            referencedTableName: airports
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            constraintName: fk_airport_freq-airport_ident
+
+            baseTableName: airport_frequencies
+            baseColumnNames: airport_ident
+
+            referencedTableName: airports
+            referencedColumnNames: ident
+

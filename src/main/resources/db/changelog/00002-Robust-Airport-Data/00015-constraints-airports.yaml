@@ -1,18 +1,8 @@
 databaseChangeLog:
   - changeSet:
-      id: 00013c
+      id: 00019
       author: kevin
       changes:
-        - addUniqueConstraint:
-            constraintName: unq_region-code
-            tableName: regions
-            columnNames: code
-
-        - addUniqueConstraint:
-            constraintName: unq_county-code
-            tableName: countries
-            columnNames: code
-
         - addForeignKeyConstraint:
             constraintName: fk_airport-country
 

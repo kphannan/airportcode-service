@@ -49,7 +49,24 @@ databaseChangeLog:
       relativeToChangelogFile: true
       file: 00012-Load-airport-frequencies.yaml
 
+#   - include:
+#       relativeToChangelogFile: true
+#       file: 00009-constraints-airports.yaml
 
   - include:
       relativeToChangelogFile: true
-      file: 00009-constraints-airports.yaml
+      file: 00013-index-countries.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00014-index-regions.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00015-constraints-airports.yaml
+  - include:
+      relativeToChangelogFile: true
+      file: 00016-constraints-runways.yaml
+  - include:
+      relativeToChangelogFile: true
+      file: 00017-constraints-airport-frequencies.yaml

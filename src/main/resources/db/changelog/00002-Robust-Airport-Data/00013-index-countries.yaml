@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 00017
+      author: kevin
+      changes:
+        - addUniqueConstraint:
+            constraintName: unq_county-code
+            tableName: countries
+            columnNames: code
+
