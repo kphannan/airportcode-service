@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 00009
+      author: kevin
+      changes:
+        - createTable:
+            tableName: navaids
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  remarks: ''

@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: 00012
+      author: kevin
+      changes:
+        - loadData:
+            tableName: airport_frequencies
+            quotchar: '"'
+            separator: ','
+            encoding: UTF-8
+            columns:
+              - column:
+                  name: id
+                  type: numeric
+
+              - column:
+                  name: airport_ref
+                  type: numeric
+
+              - column:
+                  name: airport_ident
+                  type: string
+
+              - column:
+                  name: type
+                  type: string
+
+              - column:
+                  name: description
+                  type: string
+
+              - column:
+                  name: frequency_mhz
+                  type: numeric
+
+            relativeToChangelogFile: true
+            file: data/airport-frequencies.csv
