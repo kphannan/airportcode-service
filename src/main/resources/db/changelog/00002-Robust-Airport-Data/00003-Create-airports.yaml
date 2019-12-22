@@ -89,14 +89,10 @@ databaseChangeLog:
               - column:
                   name: iata_code
                   type: char(3)
-                  # constraints:
-                  #   nullable: false
                   remarks: 'The three-letter IATA code for the airport (if it has one).'
               - column:
                   name: local_code
                   type: char(7)
-                  # constraints:
-                  #   nullable: false
                   remarks: 'The local country code for the airport, if different from the gps_code and iata_code fields (used mainly for US airports).'
               - column:
                   name: home_link

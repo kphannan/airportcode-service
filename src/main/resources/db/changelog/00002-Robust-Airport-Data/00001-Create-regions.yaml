@@ -48,12 +48,8 @@ databaseChangeLog:
               - column:
                   name: wikipedia_link
                   type: varchar(255)
-                  # constraints:
-                  #   nullable: false
                   remarks: 'A link to the Wikipedia article describing the subdivision.'
               - column:
                   name: keywords
                   type: varchar(255)
-                  # constraints:
-                  #   nullable: true
                   remarks: 'A comma-separated list of keywords to assist with search. May include former names for the region, and/or the region name in other languages.'

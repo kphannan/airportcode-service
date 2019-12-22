@@ -68,26 +68,19 @@ databaseChangeLog:
               - column:
                   name: dme_frequency_khz
                   type: integer
-                  # constraints:
-                  #   nullable: false
                   remarks: 'The paired VHF frequency for the DME (or TACAN) in kilohertz. Divide by 1,000 to get the paired VHF frequency in megahertz (e.g. 115.3 MHz).'
               - column:
                   name: dme_channel
                   type: char(4)
-                  # constraints:
-                  #   nullable: false
+
                   remarks: 'The DME channel (an alternative way of tuning distance-measuring equipment).'
               - column:
                   name: dme_latitude_deg
                   type: decimal(10,6)
-                  # constraints:
-                  #   nullable: false
                   remarks: 'The latitude of the associated DME in decimal degrees (negative for south). If missing, assume that the value is the same as latitude_deg.'
               - column:
                   name: dme_longitude_deg
                   type: decimal(10,6)
-                  # constraints:
-                  #   nullable: false
                   remarks: 'The longitude of the associated DME in decimal degrees (negative for west). If missing, assume that the value is the same as longitude_deg.'
               - column:
                   name: dme_elevation_ft
@@ -96,14 +89,10 @@ databaseChangeLog:
               - column:
                   name: slaved_variation_deg
                   type: decimal(6,2)
-                  # constraints:
-                  #   nullable: false
-                  # remarks: 'The magnetic variation adjustment built into a VOR''s, VOR-DME''s, or TACAN''s radials. Positive means east (added to the true direction), and negative means west (subtracted from the true direction). This will not usually be the same as magnetic-variation because the magnetic pole is constantly in motion.'
+                  remarks: 'The magnetic variation adjustment built into a VOR''s, VOR-DME''s, or TACAN''s radials. Positive means east (added to the true direction), and negative means west (subtracted from the true direction). This will not usually be the same as magnetic-variation because the magnetic pole is constantly in motion.'
               - column:
                   name: magnetic_variation_deg
                   type: decimal(6,3)
-                  # constraints:
-                  #   nullable: false
                   remarks: 'The actual magnetic variation at the navaid''s location. Positive means east (added to the true direction), and negative means west (subtracted from the true direction).'
               - column:
                   name: usageType
@@ -123,9 +112,4 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   remarks: 'The OurAirports text identifier (usually the ICAO code) for an airport associated with the navaid. Links to the ident column in airports.csv.'
-              # - column:
-              #     name: 
-              #     type: 
-              #     constraints:
-              #       nullable: false
-              #     remarks: ''
+

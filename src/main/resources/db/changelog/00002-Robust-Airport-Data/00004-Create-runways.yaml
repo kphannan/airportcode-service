@@ -68,15 +68,11 @@ databaseChangeLog:
                   name: le_latitude_deg
                   # type: decimal(10,6)
                   type: decimal(14,6)
-                  # constraints:
-                  #   nullable: false
                   remarks: 'Latitude of the centre of the low-numbered end of the runway, in decimal degrees (positive is north), if available.'
               - column:
                   name: le_longitude_deg
                   # type: decimal(10,6)
                   type: decimal(14,6)
-                  # constraints:
-                  #   nullable: false
                   remarks: 'Longitude of the centre of the low-numbered end of the runway, in decimal degrees (positive is east), if available.'
               - column:
                   name: le_elevation_ft
@@ -85,8 +81,6 @@ databaseChangeLog:
               - column:
                   name: le_heading_degT
                   type: integer
-                  # constraints:
-                  #   nullable: false
                   remarks: 'Heading of the low-numbered end of the runway in degrees true (not magnetic).'
               - column:
                   name: le_displaced_threshold_ft
@@ -102,14 +96,10 @@ databaseChangeLog:
               - column:
                   name: he_latitude_deg
                   type: decimal(10,6)
-                  # constraints:
-                  #   nullable: false
                   remarks: 'Latitude of the centre of the high-numbered end of the runway, in decimal degrees (positive is north), if available.'
               - column:
                   name: he_longitude_deg
                   type: decimal(10,6)
-                  # constraints:
-                  #   nullable: false
                   remarks: 'Longitude of the centre of the high-numbered end of the runway, in decimal degrees (positive is east), if available.'
               - column:
                   name: he_elevation_ft
@@ -118,8 +108,6 @@ databaseChangeLog:
               - column:
                   name: he_heading_degT
                   type: integer
-                  # constraints:
-                  #   nullable: false
                   remarks: 'Heading of the high-numbered end of the runway in degrees true (not magnetic).'
               - column:
                   name: he_displaced_threshold_ft
