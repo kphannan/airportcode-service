@@ -17,9 +17,9 @@ databaseChangeLog:
       relativeToChangelogFile: true
       file: 00004-Create-runways.yaml
 
-#   - include:
-#       relativeToChangelogFile: true
-#       file: 00005-Create-navaids.yaml
+  - include:
+      relativeToChangelogFile: true
+      file: 00005-Create-navaids.yaml
 
   - include:
       relativeToChangelogFile: true
@@ -41,11 +41,10 @@ databaseChangeLog:
       relativeToChangelogFile: true
       file: 00010-Load-runways.yaml
 
+  - include:
+      relativeToChangelogFile: true
+      file: 00011-Load-navaids.yaml
 
   - include:
       relativeToChangelogFile: true
       file: 00012-Load-airport-frequencies.yaml
-
-  # - includeAll:
-  #     path: changes
-  #     relativeToChangelogFile: true

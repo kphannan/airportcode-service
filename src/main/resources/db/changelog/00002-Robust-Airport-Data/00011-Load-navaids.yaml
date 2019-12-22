@@ -12,15 +12,23 @@ databaseChangeLog:
               - column:
                   name: id
                   type: numeric
+
+              - column:
+                  name: filename
+                  type: string
               - column:
                   name: ident
+                  type: string
+
+              - column:
+                  name: name
                   type: string
               - column:
                   name: type
                   type: string
               - column:
-                  name: name
-                  type: string
+                  name: frequency_khz
+                  type: numeric
               - column:
                   name: latitude_deg
                   type: numeric
@@ -29,40 +37,40 @@ databaseChangeLog:
                   type: numeric
               - column:
                   name: elevation_ft
-                #   type: numeric
-                  type: string
-              - column:
-                  name: continent
+                  # type: numeric
                   type: string
               - column:
                   name: iso_country
                   type: string
               - column:
-                  name: iso_region
+                  name: dme_frequency_khz
+                  type: numeric
+              - column:
+                  name: dme_channel
                   type: string
               - column:
-                  name: municipality
+                  name: dme_latitude_deg
+                  type: numeric
+              - column:
+                  name: dme_longitude_deg
+                  type: numeric
+              - column:
+                  name: dme_elevation_ft
+                  type: numeric
+              - column:
+                  name: slaved_variation_deg
+                  type: numeric
+              - column:
+                  name: magnetic_variation_deg
+                  type: numeric
+              - column:
+                  name: usageType
                   type: string
               - column:
-                  name: scheduled_service
+                  name: power
                   type: string
               - column:
-                  name: gps_code
-                  type: string
-              - column:
-                  name: iata_code
-                  type: string
-              - column:
-                  name: local_code
-                  type: string
-              - column:
-                  name: home_link
-                  type: string
-              - column:
-                  name: wikipedia_link
-                  type: string
-              - column:
-                  name: keywords
+                  name: associated_airport
                   type: string
 
             relativeToChangelogFile: true

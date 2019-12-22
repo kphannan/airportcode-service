@@ -1,4 +1,4 @@
-"id","filename","ident","name","type","frequency_khz","latitude_deg","longitude_deg","elevation_ft","iso_country","dme_frequency_khz","dme_channel","dme_latitude_deg","dme_longitude_deg","dme_elevation_ft","slaved_variation_deg","magnetic_variation_deg","usageType","power","associated_airport",
+"id","filename","ident","name","type","frequency_khz","latitude_deg","longitude_deg","elevation_ft","iso_country","dme_frequency_khz","dme_channel","dme_latitude_deg","dme_longitude_deg","dme_elevation_ft","slaved_variation_deg","magnetic_variation_deg","usageType","power","associated_airport"
 85050,"Williams_Harbour_NDB_CA","1A","Williams Harbour","NDB",373,52.55889892578125,-55.78219985961914,70,"CA",,,,,,,-23.072,"LO","MEDIUM","CCA6"
 85051,"Sable_Island_NDB_CA","1B","Sable Island","NDB",277,43.930599212646484,-60.02289962768555,,"CA",,,,,,,-19.1,"LO","MEDIUM",
 85052,"Nanaimo_DME_CA","1CD","Nanaimo","DME",111450,49.05720138549805,-123.87200164794922,83,"CA",111450,"051Y",,,,,18.282,"LO","LOW","CYCD"
