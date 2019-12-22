@@ -48,3 +48,8 @@ databaseChangeLog:
   - include:
       relativeToChangelogFile: true
       file: 00012-Load-airport-frequencies.yaml
+
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00009-constraints-airports.yaml

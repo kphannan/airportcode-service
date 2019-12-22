@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 00013c
+      author: kevin
+      changes:
+        - addUniqueConstraint:
+            constraintName: unq_region-code
+            tableName: regions
+            columnNames: code
+
+        - addUniqueConstraint:
+            constraintName: unq_county-code
+            tableName: countries
+            columnNames: code
+
+        - addForeignKeyConstraint:
+            constraintName: fk_airport-country
+
+            baseTableName: airports
+            baseColumnNames: iso_country
+
+            referencedTableName: countries
+            referencedColumnNames: code
+
+        - addForeignKeyConstraint:
+            constraintName: fk_airport-region
+
+            baseTableName: airports
+            baseColumnNames: iso_region
+
+            referencedTableName: regions
+            referencedColumnNames: code
+
