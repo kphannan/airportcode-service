@@ -31,14 +31,10 @@ databaseChangeLog:
               - column:
                   name: length_ft
                   type: integer
-                  # constraints:
-                  #   nullable: false
                   remarks: 'Length of the full runway surface (including displaced thresholds, overrun areas, etc) in feet.'
               - column:
                   name: width_ft
                   type: integer
-                  # constraints:
-                  #   nullable: false
                   remarks: 'Width of the runway surface in feet.'
 
               - column:
@@ -84,10 +80,7 @@ databaseChangeLog:
                   remarks: 'Longitude of the centre of the low-numbered end of the runway, in decimal degrees (positive is east), if available.'
               - column:
                   name: le_elevation_ft
-                  # type: integer
-                  type: char(8)
-                  # constraints:
-                  #   nullable: false
+                  type: integer
                   remarks: 'Elevation above MSL of the low-numbered end of the runway in feet.'
               - column:
                   name: le_heading_degT
@@ -98,8 +91,6 @@ databaseChangeLog:
               - column:
                   name: le_displaced_threshold_ft
                   type: integer
-                  # constraints:
-                  #   nullable: false
                   remarks: 'Length of the displaced threshold (if any) for the low-numbered end of the runway, in feet.'
 
               - column:
@@ -122,10 +113,7 @@ databaseChangeLog:
                   remarks: 'Longitude of the centre of the high-numbered end of the runway, in decimal degrees (positive is east), if available.'
               - column:
                   name: he_elevation_ft
-                  # type: integer
-                  type: char(5)
-                  # constraints:
-                  #   nullable: false
+                  type: integer
                   remarks: 'Elevation above MSL of the high-numbered end of the runway in feet.'
               - column:
                   name: he_heading_degT
@@ -136,6 +124,4 @@ databaseChangeLog:
               - column:
                   name: he_displaced_threshold_ft
                   type: integer
-                  # constraints:
-                  #   nullable: false
                   remarks: 'Length of the displaced threshold (if any) for the high-numbered end of the runway, in feet.'

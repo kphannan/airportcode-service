@@ -50,8 +50,7 @@ databaseChangeLog:
                   type: numeric
               - column:
                   name: le_elevation_ft
-                  # type: numeric
-                  type: string
+                  type: numeric
               - column:
                   name: le_heading_degT
                   type: numeric
@@ -70,8 +69,7 @@ databaseChangeLog:
                   type: numeric
               - column:
                   name: he_elevation_ft
-                  # type: numeric
-                  type: string
+                  type: numeric
               - column:
                   name: he_heading_degT
                   type: numeric

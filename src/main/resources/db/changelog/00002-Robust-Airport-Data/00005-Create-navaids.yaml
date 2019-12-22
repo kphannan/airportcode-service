@@ -57,10 +57,7 @@ databaseChangeLog:
                   remarks: 'The longitude of the navaid in decimal degrees (negative for west).'
               - column:
                   name: elevation_ft
-                  # type: integer
-                  type: char(5)
-                  constraints:
-                    nullable: false
+                  type: integer
                   remarks: 'The navaid''s elevation MSL in feet (not metres).'
               - column:
                   name: iso_country
@@ -95,8 +92,6 @@ databaseChangeLog:
               - column:
                   name: dme_elevation_ft
                   type: integer
-                  # constraints:
-                  #   nullable: false
                   remarks: 'The associated DME transmitters elevation MSL in feet. If missing, assume that it''s the same value as elevation_ft.'
               - column:
                   name: slaved_variation_deg

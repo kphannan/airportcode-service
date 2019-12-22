@@ -37,8 +37,7 @@ databaseChangeLog:
                   type: numeric
               - column:
                   name: elevation_ft
-                  # type: numeric
-                  type: string
+                  type: numeric
               - column:
                   name: iso_country
                   type: string

@@ -47,10 +47,7 @@ databaseChangeLog:
                   remarks: 'The airport longitude in decimal degrees (positive for east).'
               - column:
                   name: elevation_ft
-                  # type: integer
-                  type: char(10)
-                  # constraints:
-                  #   nullable: false
+                  type: integer
                   remarks: 'The airport elevation MSL in feet (not metres).'
               - column:
                   name: continent
