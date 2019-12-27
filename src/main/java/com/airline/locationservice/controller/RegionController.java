@@ -12,6 +12,7 @@ import com.airline.locationservice.repository.RegionsRepository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,8 +38,11 @@ public class RegionController {
     }
 
 
+    // @PageableDefault(size = 10, direction = Sort.Direction.DESC, sort = "someField")
+
     @GetMapping("")
-    Page<Region> all(Pageable pageable)
+    // Page<Region> all(@PageableDefault(page = 0, size = 20, direction = Sort.Direction.DESC, sort = "someField") Pageable pageable)
+    Page<Region> all(@PageableDefault(page = 0, size = 20) Pageable pageable)
     {
         // Get list of airport codes from the DB, potentially an empty list.
         Page<Region> result = repository.findAll(pageable);

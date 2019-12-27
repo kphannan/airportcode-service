@@ -22,6 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -44,6 +45,7 @@ import org.junit.jupiter.api.Test;
 // import org.junit.jupiter.api.extension.ExtendWith;
 // import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 // import org.springframework.boot.test.mock.mockito.MockBean;
 // import org.springframework.data.web.JsonPath;
 // import org.springframework.boot.test.mock.mockito.Mock;
@@ -53,6 +55,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 // import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 // import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import org.mockito.InjectMocks;
@@ -79,6 +82,7 @@ public class RegionControllerTest
     public void setup()
     {
         mvc = MockMvcBuilders.standaloneSetup(service)
+                .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
                 // .setControllerAdvice(new SuperHeroExceptionHandler())
                 // .addFilters(new SuperHeroFilter())
                 .build();
@@ -86,7 +90,7 @@ public class RegionControllerTest
 
 
     @Test
-    public void getSingleKnownIataAirportCode()
+    public void getSingleKnownRegionCode()
         throws Exception
     {
         // 306086 - is the DB key for Region 'US-GA'
@@ -128,19 +132,21 @@ public class RegionControllerTest
 
 
 
-    // @Test
-    // public void getAllAiportCodesIsEmpty()
-    //     throws Exception
-    // {
-    //     given( repository.findAll()).willReturn( Collections.emptyList());
+    @Test
+    public void getAllRegionsIsEmpty()
+        throws Exception
+    {
+        given( repository.findAll()).willReturn( Collections.emptyList());
 
-    //     final MockHttpServletResponse response = mvc.perform(
-    //         get("/location/region" ))
-    //         .andDo(MockMvcResultHandlers.print())
-    //         .andExpect(status().isOk() )
-    //         .andExpect(content().json("[]"))
-    //         .andReturn().getResponse();
-    // }
+        final MockHttpServletResponse response = mvc.perform(
+            get("/location/region" ))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(status().isOk() )
+            // .andExpect(content().) //  .json("[]"))
+            .andExpect(jsonPath("$").doesNotExist())
+            // .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andReturn().getResponse();
+    }
 
 
 
