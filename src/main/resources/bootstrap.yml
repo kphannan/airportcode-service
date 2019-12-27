@@ -17,7 +17,10 @@ spring:
   profiles:
     active: ${active_profiles:local}
 
-  cloud:
+  main:
+    lazy-initialization: true
+
+    cloud:
     configs:
       uri: http://localhost:8080
       enabled: false
@@ -67,7 +70,7 @@ logging:
             # Enable logging of SQL
             sql: trace
 
-      springframework:  debug
+      springframework:  INFO
         # boot: debug
         # beans: debug
 
