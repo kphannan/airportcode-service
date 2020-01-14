@@ -1,0 +1,72 @@
+# Data sourced from: https://ourairports.com/data/
+#   - data dictionary: https://ourairports.com/help/data-dictionary.html
+databaseChangeLog:
+  - include:
+      relativeToChangelogFile: true
+      file: 00001-Create-regions.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00002-Create-countries.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00003-Create-airports.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00004-Create-runways.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00005-Create-navaids.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00006-Create-airport-frequencies.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00007-Load-regions.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00008-Load-countries.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00009-Load-airports.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00010-Load-runways.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00011-Load-navaids.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00012-Load-airport-frequencies.yaml
+
+#   - include:
+#       relativeToChangelogFile: true
+#       file: 00009-constraints-airports.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00013-index-countries.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00014-index-regions.yaml
+
+  - include:
+      relativeToChangelogFile: true
+      file: 00015-constraints-airports.yaml
+  - include:
+      relativeToChangelogFile: true
+      file: 00016-constraints-runways.yaml
+  - include:
+      relativeToChangelogFile: true
+      file: 00017-constraints-airport-frequencies.yaml

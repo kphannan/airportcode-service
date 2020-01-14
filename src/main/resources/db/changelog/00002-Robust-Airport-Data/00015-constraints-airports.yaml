@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 00019
+      author: kevin
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_airport-country
+
+            baseTableName: airports
+            baseColumnNames: iso_country
+
+            referencedTableName: countries
+            referencedColumnNames: code
+
+        - addForeignKeyConstraint:
+            constraintName: fk_airport-region
+
+            baseTableName: airports
+            baseColumnNames: iso_region
+
+            referencedTableName: regions
+            referencedColumnNames: code
+

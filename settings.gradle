@@ -16,4 +16,4 @@ pluginManagement {
 // project( ':core' ).projectDir = new File( settingsDir, '../core')
 // project( ':core' ).projectDir = new File( '../core')
 includeFlat 'core'
-rootProject.name = 'location-service'
+// rootProject.name = 'location-service'

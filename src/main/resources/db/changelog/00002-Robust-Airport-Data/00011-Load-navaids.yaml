@@ -1,0 +1,76 @@
+databaseChangeLog:
+  - changeSet:
+      id: 00015
+      author: kevin
+      changes:
+        - loadData:
+            tableName: navaids
+            quotchar: '"'
+            separator: ','
+            encoding: UTF-8
+            columns:
+              - column:
+                  name: id
+                  type: numeric
+
+              - column:
+                  name: filename
+                  type: string
+              - column:
+                  name: ident
+                  type: string
+
+              - column:
+                  name: name
+                  type: string
+              - column:
+                  name: type
+                  type: string
+              - column:
+                  name: frequency_khz
+                  type: numeric
+              - column:
+                  name: latitude_deg
+                  type: numeric
+              - column:
+                  name: longitude_deg
+                  type: numeric
+              - column:
+                  name: elevation_ft
+                  type: numeric
+              - column:
+                  name: iso_country
+                  type: string
+              - column:
+                  name: dme_frequency_khz
+                  type: numeric
+              - column:
+                  name: dme_channel
+                  type: string
+              - column:
+                  name: dme_latitude_deg
+                  type: numeric
+              - column:
+                  name: dme_longitude_deg
+                  type: numeric
+              - column:
+                  name: dme_elevation_ft
+                  type: numeric
+              - column:
+                  name: slaved_variation_deg
+                  type: numeric
+              - column:
+                  name: magnetic_variation_deg
+                  type: numeric
+              - column:
+                  name: usageType
+                  type: string
+              - column:
+                  name: power
+                  type: string
+              - column:
+                  name: associated_airport
+                  type: string
+
+            relativeToChangelogFile: true
+            file: data/navaids.csv

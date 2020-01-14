@@ -16,12 +16,12 @@ public class AirportCodeIcao
     @Column( name = "ICAO_CODE" )
     private String icaoCode;
 
-    @Override
-    public String toString()
-    {
-        // return "{ICAO airport code: '" + icaoCode + "'}";
-        return icaoCode;
-    }
+    // @Override
+    // public String toString()
+    // {
+    //     // return "{ICAO airport code: '" + icaoCode + "'}";
+    //     return icaoCode;
+    // }
 
     protected AirportCodeIcao() {}
 

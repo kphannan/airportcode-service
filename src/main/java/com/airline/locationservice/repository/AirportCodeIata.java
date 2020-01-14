@@ -22,12 +22,12 @@ public class AirportCodeIata
     @Column( name = "IATA_CODE" )
     private String iataCode;
 
-    @Override
-    public String toString()
-    {
-        // return "{IATA airport code: '" + iataCode + "'}";
-        return iataCode;
-    }
+    // @Override
+    // public String toString()
+    // {
+    //     // return "{IATA airport code: '" + iataCode + "'}";
+    //     return iataCode;
+    // }
 
     protected AirportCodeIata() {}
 
