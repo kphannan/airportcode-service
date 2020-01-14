@@ -73,13 +73,11 @@ public class CountryController {
     ResponseEntity<Country> findCountryById(@PathVariable Integer id )
     {
         Optional<Country> region = repository.findById(id);
-                                        //  .orElseThrow(() -> new AirportCodeNotFoundException( "999" ));
+
         if ( region.isPresent() )
             return ResponseEntity.ok(region.get());
         else
             return ResponseEntity.notFound().build();
-        // return new ResponseEntity<>( new IATAAirportCode( iata.getIataCode() ),
-        //                              HttpStatus.OK );
     }
 
     @GetMapping("/code/{countryCode}")
