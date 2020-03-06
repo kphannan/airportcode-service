@@ -43,7 +43,8 @@ plugins {
 
 group = 'com.airline'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+// sourceCompatibility = '1.8'
+sourceCompatibility = 13
 targetCompatibility = "${sourceCompatibility}"
 
 configurations {
@@ -54,7 +55,15 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+
+    integrationTestImplementation.extendsFrom testImplementation
 }
+// configurations {
+//     // integrationTest.extendsFrom testImplementation
+//     integrationTestImplementation.extendsFrom testImplementation
+//     // integrationTestCompile.extendsFrom testCompile
+//     // integrationTestRuntime.extendsFrom testRuntime
+// }
 
 repositories {
 	jcenter()
@@ -82,17 +91,11 @@ def changeLog = "$projectDir/src/main/resources/db/changelog/db.changelog-master
 //     }
 // }
 
-configurations {
-    // integrationTest.extendsFrom testImplementation
-    integrationTestImplementation.extendsFrom testImplementation
-    // integrationTestCompile.extendsFrom testCompile
-    // integrationTestRuntime.extendsFrom testRuntime
-}
 
 
 dependencies {
 
-	implementation project( ":core" )
+	implementation project( ":airline-core" )
     // implementation( 'com.airport:airport-core:0.0.1-SNAPSHOT' )
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
@@ -183,7 +186,19 @@ sourceSets {
             exclude '**/*.java'
         }
     }
+
+    integrationTest {
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+        resources {
+            srcDir file('src/integrationTest/java')
+            exclude '**/*.java'
+        }
+    }
 }
+
+
+
 test {
 	outputs.dir snippetsDir
     // Use junit platform for unit tests
@@ -198,16 +213,6 @@ test {
     outputs.upToDateWhen { false }
 }
 
-sourceSets {
-    integrationTest {
-        compileClasspath += main.output + test.output
-        runtimeClasspath += main.output + test.output
-        resources {
-            srcDir file('src/integrationTest/java')
-            exclude '**/*.java'
-        }
-    }
-}
 
 
 task integrationTest(type: Test) {

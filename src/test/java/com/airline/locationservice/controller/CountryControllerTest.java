@@ -5,9 +5,9 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+// import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+// import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+// import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -16,11 +16,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+// import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
+// import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+// import java.util.stream.Collectors;
 
 import com.airline.locationservice.model.Country;
 
@@ -30,7 +30,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.http.*;
+// import org.springframework.http.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -68,32 +68,35 @@ public class CountryControllerTest
     }
 
 
-    @Test
-    public void getSingleKnownCountryId()
-        throws Exception
-    {
-        // 302797 - is the DB key for Country 'Guyana'
-        // final IATAAirportCode airportCode = new IATAAirportCode( "ATL" );
-        // assertThat( airportCode ).isNotNull();
+    // @Test
+    // public void getSingleKnownCountryId()
+    //     throws Exception
+    // {
+    //     // 302797 - is the DB key for Country 'Guyana'
+    //     // final IATAAirportCode airportCode = new IATAAirportCode( "ATL" );
+    //     // assertThat( airportCode ).isNotNull();
 
-        // when( repository.findById("ATL")).thenReturn( Optional.of( new AirportCodeIata( airportCode.getAirportCode() )));
-        given( repository.findById(302797)).willReturn( Optional.of( new Country( )));
+    //     // when( repository.findById("ATL")).thenReturn( Optional.of( new AirportCodeIata( airportCode.getAirportCode() )));
+    //     given( repository.findById(302797)).willReturn( Optional.of( new Country( )));
 
-        final MockHttpServletResponse response = mvc.perform(
-            get("/location/country/{id}", 302797 )
-                .accept( MediaType.APPLICATION_JSON ))
-            .andExpect(status().isOk() )
-            // .andExpect( jsonPath("$.code", equalTo( "GY")))
-            .andReturn().getResponse();
+    //     final MockHttpServletResponse response = mvc.perform(
+    //         get("/location/country/{id}", 302797 )
+    //             .accept( MediaType.APPLICATION_JSON ))
+    //         .andExpect(status().isOk() )
+    //         // .andExpect( jsonPath("$.code", equalTo( "GY")))
+    //         .andReturn().getResponse();
 
-        // assert the response contains the airport code
-        // assertThat(response)
-        //     .isNotNull()
-        //     .has()
+    //     // assert the response contains the airport code
+    //     // assertThat(response)
+    //     //     .isNotNull()
+    //     //     .has()
 
-        // assertThat(response).ok();
-        // LocationControllerIata controller = new LocationControllerIata( mockRepository );
-    }
+    //     // assertThat(response).ok();
+    //     // LocationControllerIata controller = new LocationControllerIata( mockRepository );
+    // }
+
+
+    
 
     @Test
     public void getSingleNotKnownCountryId()
@@ -108,6 +111,38 @@ public class CountryControllerTest
             // .andExpect( jsonPath("$.code", equalTo( "GY")))
             .andReturn().getResponse();
     }
+
+    @Test
+    public void getSingleKnownCountryId()
+        throws Exception
+    {
+        // --- Given ---
+        // 302797 - is the DB key for Country 'Guyana'
+        Country country = new Country();
+        country.setCode("GY");
+        country.setName("Guyana");
+        country.setId(302797);
+        given( repository.findById(302797)).willReturn( Optional.of( country ));
+
+        // --- When
+        final MockHttpServletResponse response = mvc.perform(
+            get("/location/country/{id}", 302797 )
+                .accept( MediaType.APPLICATION_JSON ))
+            .andExpect( status().isOk() )
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().json("{\"id\": 302797, \"code\": \"GY\", \"name\": \"Guyana\"}"))
+            .andDo(MockMvcResultHandlers.print())
+            .andReturn().getResponse();
+            verify(repository).findById(302797);
+            verify(repository, times(1)).findById(302797);
+
+        assertThat(response.getContentAsString())
+            .as( "Response contains an airport with IATA code 'GY'")
+            .doesNotContainAnyWhitespaces()
+            .contains("GY");
+    }
+
+
 
     @Test
     public void getSingleKnownCountryCode()
