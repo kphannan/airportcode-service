@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table( name = "IATA_AIRPORTCODE" )
+@Table( name = "AIRPORTS" )
 @Data
 public class AirportCodeIata
 {
@@ -20,7 +20,7 @@ public class AirportCodeIata
 
     @Id
     @Column( name = "IATA_CODE" )
-    private String iataCode;
+    private final String iataCode;
 
     // @Override
     // public String toString()
@@ -29,9 +29,14 @@ public class AirportCodeIata
     //     return iataCode;
     // }
 
-    protected AirportCodeIata() {}
+    protected AirportCodeIata()
+        // throws IllegalArgumentException
+    {
+        // throw new IllegalArgumentException( "Airport code is required." );
+        iataCode = "zzz";
+    }
 
-    public AirportCodeIata( String code )
+    public AirportCodeIata( final String code )
     {
         iataCode = code;
     }

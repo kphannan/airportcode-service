@@ -1,6 +1,6 @@
 package com.airline.locationservice.controller;
 
-import java.util.ArrayList;
+// import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -9,16 +9,16 @@ import java.util.stream.Collectors;
 import com.airline.locationservice.repository.AirportCodeIata;
 import com.airline.locationservice.repository.AirportCodeIataRepository;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
+// import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+// import org.springframework.web.bind.annotation.PostMapping;
+// import org.springframework.web.bind.annotation.PutMapping;
+// import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
+// import org.springframework.http.HttpStatus;
 
 import com.airline.core.location.AirportCode;
 import com.airline.core.location.AirportCodeFactory;
@@ -61,21 +61,13 @@ public class LocationControllerIata
         return ResponseEntity.ok( airports );
     }
 
-    @PostMapping("")
-    ResponseEntity<AirportCode> newAirportCode( @RequestBody IATAAirportCode newAirportCode )
-    {
-        AirportCodeIata iataDB = repository.save( new AirportCodeIata( newAirportCode.getAirportCode() ));
-
-        // Return 201 (Created)
-        return ResponseEntity.status(HttpStatus.CREATED).body(new IATAAirportCode( iataDB.getIataCode() ));
-    }
-
-    // @PostMapping("/validate")
-    // Boolean validateAirportCode( @RequestBody IATAAirportCode newAirportCode )
+    // @PostMapping("")
+    // ResponseEntity<AirportCode> newAirportCode( @RequestBody IATAAirportCode newAirportCode )
     // {
-    //     System.out.println( newAirportCode );
-    //     // return repository.save( newAirportCode );
-    //     return true;
+    //     AirportCodeIata iataDB = repository.save( new AirportCodeIata( newAirportCode.getAirportCode() ));
+
+    //     // Return 201 (Created)
+    //     return ResponseEntity.status(HttpStatus.CREATED).body(new IATAAirportCode( iataDB.getIataCode() ));
     // }
 
 
@@ -95,40 +87,40 @@ public class LocationControllerIata
             return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/{id}")
-    ResponseEntity<AirportCode> replaceAirportCode( @RequestBody IATAAirportCode newAirportCode, @PathVariable String id )
-    {
-        if ( !id.equals( newAirportCode.getAirportCode()))
-            return ResponseEntity.badRequest().build();
+    // @PutMapping("/{id}")
+    // ResponseEntity<AirportCode> replaceAirportCode( @RequestBody IATAAirportCode newAirportCode, @PathVariable String id )
+    // {
+    //     if ( !id.equals( newAirportCode.getAirportCode()))
+    //         return ResponseEntity.badRequest().build();
 
-        Optional<AirportCodeIata> iata = repository.findById( id );
-        if ( iata.isPresent() )
-        {
-            return ResponseEntity.ok( newAirportCode );
-        }
+    //     Optional<AirportCodeIata> iata = repository.findById( id );
+    //     if ( iata.isPresent() )
+    //     {
+    //         return ResponseEntity.ok( newAirportCode );
+    //     }
 
-        AirportCodeIata zzz = new AirportCodeIata( newAirportCode.getAirportCode() );
-        repository.save( zzz );
-        // Map the response to a Domain Object
-        // System.out.println( "save()");
-        // return new ResponseEntity<>( new IATAAirportCode( repository.save( newAirportCode ).getIataCode()),
-        //                              HttpStatus.CREATED );
-        return ResponseEntity.status(HttpStatus.CREATED).body( newAirportCode );
-    }
+    //     AirportCodeIata zzz = new AirportCodeIata( newAirportCode.getAirportCode() );
+    //     repository.save( zzz );
+    //     // Map the response to a Domain Object
+    //     // System.out.println( "save()");
+    //     // return new ResponseEntity<>( new IATAAirportCode( repository.save( newAirportCode ).getIataCode()),
+    //     //                              HttpStatus.CREATED );
+    //     return ResponseEntity.status(HttpStatus.CREATED).body( newAirportCode );
+    // }
 
-    @DeleteMapping("/{id}")
-    ResponseEntity<Boolean> deleteAirportCode( @PathVariable String id )
-    {
-        Optional<AirportCodeIata> iata = repository.findById(id);
-        if ( iata.isPresent() )
-        {
-            repository.deleteById(id);  // throws IllegalArgumentException if ID not found...
-            return ResponseEntity.noContent().build();   // HTTP 204
-        }
-        else
-        {
-            return ResponseEntity.notFound().build();
-        }
-    }
+    // @DeleteMapping("/{id}")
+    // ResponseEntity<Boolean> deleteAirportCode( @PathVariable String id )
+    // {
+    //     Optional<AirportCodeIata> iata = repository.findById(id);
+    //     if ( iata.isPresent() )
+    //     {
+    //         repository.deleteById(id);  // throws IllegalArgumentException if ID not found...
+    //         return ResponseEntity.noContent().build();   // HTTP 204
+    //     }
+    //     else
+    //     {
+    //         return ResponseEntity.notFound().build();
+    //     }
+    // }
 
 }

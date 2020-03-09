@@ -37,7 +37,6 @@ Feature: IATA Airport code lookup
         | ZZZ |
 
 
-
     # ----- Add airport code (POST) -----
     # Scenario Outline: Add a new IATA airport code
     #     Given path '/iata'
