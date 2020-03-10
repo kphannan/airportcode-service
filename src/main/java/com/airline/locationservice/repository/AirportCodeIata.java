@@ -7,7 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+// import org.springframework.beans.factory.annotation.Value;
+
 import lombok.Data;
+// import lombok.Value;
 
 @Entity
 @Table( name = "AIRPORTS" )
@@ -20,6 +23,7 @@ public class AirportCodeIata
 
     @Id
     @Column( name = "IATA_CODE" )
+    // @Value("#{' matches [A-Z]{3}'}")
     private final String iataCode;
 
     // @Override

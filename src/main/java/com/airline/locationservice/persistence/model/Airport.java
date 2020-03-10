@@ -73,7 +73,7 @@ public class Airport
      */
     @Column( name = "LONGITUDE_DEG" )
     @NotNull
-    private BigDecimal logitude;
+    private BigDecimal longitude;
 
     /**
      * The airport elevation MSL in feet (not metres).

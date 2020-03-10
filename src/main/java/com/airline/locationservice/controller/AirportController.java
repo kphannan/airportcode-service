@@ -18,13 +18,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 // import org.springframework.web.bind.annotation.PutMapping;
 // import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 // import org.springframework.http.HttpStatus;
 
 @RestController
 // @RequestMapping("/location/airport")
-@RequestMapping("/")
+@RequestMapping("/airport")
 public class AirportController {
 
     private final AirportRepository repository;
@@ -33,13 +38,15 @@ public class AirportController {
             this.repository = repository;
     }
 
-    @GetMapping("")
-    ResponseEntity<List<Airport>> all() {
-        List<Airport> result = repository.findAll();
+    // @GetMapping(path="", params = { "page", "size" })
+    @GetMapping(path="")
+    ResponseEntity<Page<Airport>> all( Pageable paging )
+    {
+        Page<Airport> result = repository.findAll( paging );
 
-        if (result.isEmpty()) {
-            return ResponseEntity.ok(Collections.emptyList());
-        }
+        // if (result.isEmpty()) {
+        //     return ResponseEntity.ok(result);
+        // }
 
         // Map the results to Domain Objects rather than DB objects
         // List<Airport> airports = result.stream().map(iata -> new ICAOAirportCode(iata.getIcaoCode()))
@@ -60,7 +67,7 @@ public class AirportController {
     @GetMapping("/{id}")
     ResponseEntity<Optional<Airport>> one(@PathVariable Long id) {
         Optional<Airport> airport = repository.findById(id);
-            if (airport.isPresent())
+        if (airport.isPresent())
             return ResponseEntity.ok(airport);
         else
             return ResponseEntity.notFound().build();
