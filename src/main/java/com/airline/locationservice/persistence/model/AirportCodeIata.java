@@ -2,8 +2,6 @@ package com.airline.locationservice.persistence.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-// import javax.persistence.GeneratedValue;
-// import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -25,7 +23,7 @@ public class AirportCodeIata
     // @Value("#{' matches [A-Z]{3}'}")
     private String iataCode = "ZZZ";
 
-
+    // ! Would like a single arg c'tor for 'iataCode' and no setter
     // protected AirportCodeIata()
     //     // throws IllegalArgumentException
     // {
