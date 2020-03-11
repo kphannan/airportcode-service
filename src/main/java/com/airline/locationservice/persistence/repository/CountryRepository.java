@@ -1,9 +1,9 @@
-package com.airline.locationservice.repository;
+package com.airline.locationservice.persistence.repository;
 
 import java.util.Optional;
 import java.util.List;
 
-import com.airline.locationservice.model.Country;
+import com.airline.locationservice.persistence.model.Country;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

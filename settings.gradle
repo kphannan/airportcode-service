@@ -17,3 +17,5 @@ pluginManagement {
 // project( ':core' ).projectDir = new File( '../core')
 includeFlat 'airline-core'
 // rootProject.name = 'airportcode-service'
+// Solution for intermittent failures fetching from repo (nexus) 
+// -Dhttp.socketTimeout=60000 -Dhttp.connectionTimeout=60000

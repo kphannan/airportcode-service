@@ -35,8 +35,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.airline.locationservice.model.Region;
-import com.airline.locationservice.repository.AirportCodeIata;
-import com.airline.locationservice.repository.AirportCodeIataRepository;
+// import com.airline.locationservice.repository.AirportCodeIata;
+// import com.airline.locationservice.repository.AirportCodeIataRepository;
 // import com.airline.core.location.AirportCode;
 import com.airline.core.location.IATAAirportCode;
 
@@ -61,7 +61,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import com.airline.locationservice.repository.RegionsRepository;
+import com.airline.locationservice.persistence.repository.RegionsRepository;
 
 // @ExtendWith(MockitoExtension.class)
 @SpringBootTest

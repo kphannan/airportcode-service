@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.airline.locationservice.model.Region;
+import com.airline.locationservice.persistence.model.Region;
 // import com.airline.locationservice.repository.AirportCodeIata;
 // import com.airline.locationservice.repository.AirportCodeIataRepository;
-import com.airline.locationservice.repository.RegionsRepository;
+import com.airline.locationservice.persistence.repository.RegionsRepository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,7 +41,6 @@ public class RegionController {
     // @PageableDefault(size = 10, direction = Sort.Direction.DESC, sort = "someField")
 
     @GetMapping("")
-    // Page<Region> all(@PageableDefault(page = 0, size = 20, direction = Sort.Direction.DESC, sort = "someField") Pageable pageable)
     Page<Region> all(@PageableDefault(page = 0, size = 20) Pageable pageable)
     {
         // Get list of airport codes from the DB, potentially an empty list.
@@ -87,6 +86,24 @@ public class RegionController {
     }
 
 
+
+    @GetMapping("/byContinent/{continent}")
+    ResponseEntity<Page<Region>> regionByContinent(@PathVariable String continent, Pageable paging )
+    {
+        Page<Region> region = repository.findByContinent( continent, paging);
+
+        return ResponseEntity.ok(region);
+    }
+
+    @GetMapping("/byCountry/{country}")
+    ResponseEntity<Page<Region>> regionByCountry(@PathVariable String country, Pageable paging )
+    {
+        Page<Region> region = repository.findByCountry( country, paging);
+
+        return ResponseEntity.ok(region);
+    }
+
+    // ! Add 'like' searches for name
 
     // @PutMapping("/{id}")
     // ResponseEntity<AirportCode> replaceAirportCode( @RequestBody AirportCodeIata newAirportCode, @PathVariable String id )

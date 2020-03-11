@@ -68,18 +68,18 @@ logging:
     root: INFO
 
     com:
-      airline: DEBUG
+      airline: INFO
       delta: DEBUG
 
     org:
       apache: ERROR
 
       hibernate:
-        SQL: DEBUG
+        SQL: WARN
         type:
           descriptor:
             # Enable logging of SQL
-            sql: trace
+            sql: DEBUG
 
       springframework:  INFO
         # boot: debug

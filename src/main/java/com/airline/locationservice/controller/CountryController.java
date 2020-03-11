@@ -1,14 +1,10 @@
 package com.airline.locationservice.controller;
 
-// import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-// import java.util.stream.Collectors;
 
-import com.airline.locationservice.model.Country;
-// import com.airline.locationservice.repository.AirportCodeIata;
-// import com.airline.locationservice.repository.AirportCodeIataRepository;
-import com.airline.locationservice.repository.CountryRepository;
+import com.airline.locationservice.persistence.model.Country;
+import com.airline.locationservice.persistence.repository.CountryRepository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 // import org.springframework.http.HttpStatus;
 
-// import com.airline.core.location.AirportCode;
-// import com.airline.core.location.IATAAirportCode;
 
 @RestController
 @RequestMapping("/location/country")

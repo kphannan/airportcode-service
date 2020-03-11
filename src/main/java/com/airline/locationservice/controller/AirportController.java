@@ -14,22 +14,23 @@ import com.airline.locationservice.persistence.repository.AirportRepository;
 // import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-// import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 // import org.springframework.web.bind.annotation.PutMapping;
-// import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-// import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatus;
 
 @RestController
 // @RequestMapping("/location/airport")
-@RequestMapping("/airport")
+@RequestMapping("/location/airport")
 public class AirportController {
 
     private final AirportRepository repository;
@@ -56,13 +57,16 @@ public class AirportController {
         return ResponseEntity.ok(result);
     }
 
-    // @PostMapping("")
-    // ResponseEntity<AirportCode> newAirportCode(@RequestBody ICAOAirportCode newAirportCode) {
-    //     Airport icaoDB = repository.save(new Airport(newAirportCode.getAirportCode()));
+    @PostMapping("")
+    @ResponseStatus( HttpStatus.CREATED )
+    // ResponseEntity<Airport> newAirportCode(@RequestBody Airport newAirport) {
+    Airport newAirportCode(@RequestBody Airport newAirport) {
+        Airport airport = repository.save(newAirport);
 
-    //     // Return 201 (Created)
-    //     return new ResponseEntity<>(new ICAOAirportCode(icaoDB.getIcaoCode()), HttpStatus.CREATED);
-    // }
+        // Return 201 (Created)
+        // return new ResponseEntity.created(airport).build();
+        return airport;
+    }
 
     @GetMapping("/{id}")
     ResponseEntity<Optional<Airport>> one(@PathVariable Long id) {

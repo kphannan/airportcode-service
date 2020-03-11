@@ -1,4 +1,4 @@
-package com.airline.locationservice.model;
+package com.airline.locationservice.persistence.model;
 
 import java.net.URI;
 
@@ -12,9 +12,9 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
-@Table( name = "regions" )
+@Table( name = "countries" )
 @Data
-public class Region
+public class Country
 {
     // @Id
     // @GeneratedValue( strategy = GenerationType.AUTO )
@@ -29,17 +29,9 @@ public class Region
     @NotNull
     private String code;
 
-    @Column( name = "local_code" )
-    @NotNull
-    private String localCode;
-
     @Column( name = "name" )
     @NotNull
     private String name;
-
-    @Column( name = "iso_country" )
-    @NotNull
-    private String iso_country;
 
     @Column( name = "continent" )
     @NotNull
