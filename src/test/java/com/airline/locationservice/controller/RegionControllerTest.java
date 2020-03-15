@@ -17,44 +17,23 @@ import static org.mockito.BDDMockito.*;
 // import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-// import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import com.airline.locationservice.model.Region;
-// import com.airline.locationservice.repository.AirportCodeIata;
-// import com.airline.locationservice.repository.AirportCodeIataRepository;
-// import com.airline.core.location.AirportCode;
-import com.airline.core.location.IATAAirportCode;
+import com.airline.locationservice.persistence.model.Region;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-// import org.junit.jupiter.api.extension.ExtendWith;
-// import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-// import org.springframework.boot.test.mock.mockito.MockBean;
-// import org.springframework.data.web.JsonPath;
-// import org.springframework.boot.test.mock.mockito.Mock;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-// import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletResponse;
-// import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-// import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -65,6 +44,7 @@ import com.airline.locationservice.persistence.repository.RegionsRepository;
 
 // @ExtendWith(MockitoExtension.class)
 @SpringBootTest
+@WebAppConfiguration
 public class RegionControllerTest
 {
     // @Autowired

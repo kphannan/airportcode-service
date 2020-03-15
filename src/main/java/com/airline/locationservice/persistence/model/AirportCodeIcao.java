@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class AirportCodeIcao
 {
     @Id
-    @Column( name = "ICAO_CODE" )
+    @Column( name = "IDENT" )
     private String icaoCode;
 
     // protected AirportCodeIcao() {}

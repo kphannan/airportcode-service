@@ -11,7 +11,7 @@ package com.airline.locationservice.controller;
 import static org.assertj.core.api.Assertions.*;
 
 // import static org.assertj.core.api.BDDAssertions.then;
-// import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.any;
 // import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.*;
 // import static org.mockito.Mockito.when;
@@ -24,65 +24,90 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-
-// import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+// import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.airline.locationservice.repository.AirportCodeIata;
-import com.airline.locationservice.repository.AirportCodeIataRepository;
-// import com.airline.core.location.AirportCode;
-import com.airline.core.location.IATAAirportCode;
-
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+// import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 // import org.junit.jupiter.api.extension.ExtendWith;
 // import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 // import org.springframework.boot.test.mock.mockito.MockBean;
 // import org.springframework.data.web.JsonPath;
+import org.springframework.data.domain.Pageable;
+// import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+// import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+// import org.springframework.data.web.config.EnableSpringDataWebSupport;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.test.context.web.WebAppConfiguration;
+// import org.springframework.data.domain.PageRequest;
 // import org.springframework.boot.test.mock.mockito.Mock;
 import org.springframework.test.web.servlet.MockMvc;
 // import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletResponse;
 // import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-// import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import liquibase.Liquibase;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.airline.locationservice.persistence.model.AirportCodeIata;
+import com.airline.locationservice.persistence.repository.AirportCodeIataRepository;
+// import com.airline.core.location.AirportCode;
+import com.airline.core.location.IATAAirportCode;
 
-// @ExtendWith(MockitoExtension.class)
-@SpringBootTest
-public class LocationControllerIataTest
-{
+@ExtendWith(MockitoExtension.class)
+@SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
+// @WebMvcTest(controllers = LocationControllerIata.class)
+// @EnableJpaRepositories(basePackages="com.airline.locationservice",
+// entityManagerFactoryRef="emf")
+// @EnableJpaRepositories(basePackages="com.airline.locationservice")
+// @EnableSpringDataWebSupport
+@WebAppConfiguration
+public class LocationControllerIataTest {
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
     // @Autowired
-    private MockMvc   mvc;
+    private MockMvc mvc;
 
     // mock repository
     @Mock
     AirportCodeIataRepository repository;
 
     @InjectMocks
-    LocationControllerIata    service;
+    LocationControllerIata service;
     // private AirportCodeRes
+
+    // @BeforeAll
+    // public static void switchOffLiquibase() {
+    //     System.setProperty(Liquibase.SHOULD_RUN_SYSTEM_PROPERTY, "false");
+    // }
 
     @BeforeEach
     public void setup()
     {
-        mvc = MockMvcBuilders.standaloneSetup(service)
-                // .setControllerAdvice(new SuperHeroExceptionHandler())
-                // .addFilters(new SuperHeroFilter())
-                .build();
+        mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+            // .setControllerAdvice(new SuperHeroExceptionHandler())
+            // .addFilters(new SuperHeroFilter())
+            .build();
     }
 
 
@@ -94,10 +119,11 @@ public class LocationControllerIataTest
         assertThat( airportCode ).isNotNull();
 
         // when( repository.findById("ATL")).thenReturn( Optional.of( new AirportCodeIata( airportCode.getAirportCode() )));
-        given( repository.findById("ATL")).willReturn( Optional.of( new AirportCodeIata( airportCode.getAirportCode() )));
+        given( repository.findById("ATL"))
+            .willReturn( Optional.of( new AirportCodeIata( "ATL" )));
 
         final MockHttpServletResponse response = mvc.perform(
-            get("/airport/iata/{id}", airportCode.getAirportCode() )
+            get("/location/airport/iata/{id}", "ATL" )
                 .accept( MediaType.APPLICATION_JSON ))
             .andExpect(status().isOk() )
             // .andExpect( jsonPath("$.iataAirportCode", equalTo( "ATL")))
@@ -117,25 +143,30 @@ public class LocationControllerIataTest
     public void getSingleNotKnownIataAirportCode()
         throws Exception
     {
-        given( repository.findById("MSP")).willReturn( Optional.ofNullable( null ));
+        given( repository.findById("MSP"))
+            .willReturn( Optional.ofNullable( null ));
 
-        final MockHttpServletResponse response = mvc.perform(
-            get("/airport/iata/{id}", "MSP" )
-                .accept( MediaType.APPLICATION_JSON ))
-            .andExpect(status().isNotFound() )
-            .andReturn().getResponse();
+        final MockHttpServletResponse response =
+            mvc.perform( get("/location/airport/iata/{id}", "MSP" )
+                            .accept( MediaType.APPLICATION_JSON ))
+                .andExpect(status().isNotFound() )
+                .andReturn().getResponse();
     }
 
-
+    
 
     @Test
     public void getAllAiportCodesIsEmpty()
         throws Exception
     {
-        given( repository.findAll()).willReturn( Collections.emptyList());
+        List<AirportCodeIata> expected = new ArrayList<>();
+        Page<AirportCodeIata> foundPage = new PageImpl<>(expected);
+
+        given( repository.findAll(any(Pageable.class)))
+            .willReturn( foundPage );
 
         final MockHttpServletResponse response = mvc.perform(
-            get("/airport/iata" ))
+            get("/location/airport/iata" ))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk() )
             .andExpect(content().json("[]"))
@@ -156,11 +187,13 @@ public class LocationControllerIataTest
                   .stream()
                   .map( a -> new AirportCodeIata( a ))
                   .collect(Collectors.toList());
-        
-        given( repository.findAll()).willReturn( listOfIataAirportCodes );
+        Page<AirportCodeIata> foundPage = new PageImpl<>(listOfIataAirportCodes);
+          
+        given( repository.findAll(any(Pageable.class)))
+            .willReturn( foundPage );
 
         final MockHttpServletResponse response = mvc.perform(
-            get("/airport/iata" ))
+            get("/location/airport/iata" ))
             .andExpect(status().isOk() )
             .andExpect(content().json("[{iataAirportCode: \"NRT\"}]"))
             // .andExpect( jsonPath("$.iataAirportCode", equalTo( "ATL")))

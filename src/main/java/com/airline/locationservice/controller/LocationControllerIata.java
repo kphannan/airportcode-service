@@ -1,9 +1,9 @@
 package com.airline.locationservice.controller;
 
-import java.util.Collections;
-import java.util.List;
+// import java.util.Collections;
+// import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+// import java.util.stream.Collectors;
 
 import com.airline.locationservice.persistence.model.AirportCodeIata;
 import com.airline.locationservice.persistence.repository.AirportCodeIataRepository;
@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+// import org.springframework.data.domain.PageImpl;
+// import org.springframework.data.domain.PageRequest;
+// import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+// import org.springframework.http.HttpStatus;
+// import org.springframework.http.ResponseEntity;
 // import org.springframework.http.HttpStatus;
 
 import com.airline.core.location.AirportCode;

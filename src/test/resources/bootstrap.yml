@@ -19,6 +19,7 @@ spring:
 
   main:
     lazy-initialization: true
+    allow-bean-definition-overriding: true
 
   cloud:
     configs:

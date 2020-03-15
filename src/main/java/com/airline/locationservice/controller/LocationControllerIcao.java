@@ -1,6 +1,7 @@
 package com.airline.locationservice.controller;
 
 import java.util.Optional;
+// import java.util.regex.Pattern;
 
 import com.airline.locationservice.persistence.model.AirportCodeIcao;
 import com.airline.locationservice.persistence.repository.AirportCodeIcaoRepository;
@@ -34,18 +35,20 @@ public class LocationControllerIcao
     ResponseEntity<Page<AirportCode>> all( Pageable paging )
     {
         Page<AirportCodeIcao> result = repository.findAll( paging );
-
-        return ResponseEntity.ok(result.map(iata -> new ICAOAirportCode(iata.getIcaoCode())));
+        // Pattern pattern = Pattern.compile( "[A-Z]{4}" );
+        return ResponseEntity.ok(result
+                                    .map(icao -> new ICAOAirportCode(icao.getIcaoCode()))
+                                );
     }
 
 
     @GetMapping("/{id}")
     ResponseEntity<AirportCode> one(@PathVariable String id)
     {
-        Optional<AirportCodeIcao> iao = repository.findById(id);
-        if (iao.isPresent())
+        Optional<AirportCodeIcao> icao = repository.findById(id);
+        if (icao.isPresent())
         {
-            return ResponseEntity.ok(AirportCodeFactory.build(iao.get().getIcaoCode()));
+            return ResponseEntity.ok(AirportCodeFactory.build(icao.get().getIcaoCode()));
         }
         else
         {

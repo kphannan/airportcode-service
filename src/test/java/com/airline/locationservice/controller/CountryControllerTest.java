@@ -22,12 +22,13 @@ import java.util.Collections;
 import java.util.Optional;
 // import java.util.stream.Collectors;
 
-import com.airline.locationservice.model.Country;
+import com.airline.locationservice.persistence.model.Country;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.mock.web.MockHttpServletResponse;
 // import org.springframework.http.*;
@@ -43,6 +44,7 @@ import com.airline.locationservice.persistence.repository.CountryRepository;
 
 // @ExtendWith(MockitoExtension.class)
 @SpringBootTest
+@WebAppConfiguration
 @Log4j2
 public class CountryControllerTest
 {

@@ -30,5 +30,10 @@ public class AirportCodeIata
     //     // throw new IllegalArgumentException( "Airport code is required." );
     //     iataCode = "zzz";
     // }
+
+    public AirportCodeIata( final String iataCode )
+    {
+        this.iataCode = iataCode;
+    }
 }
 

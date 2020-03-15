@@ -36,6 +36,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.http.MediaType;
@@ -51,6 +52,7 @@ import com.airline.locationservice.persistence.repository.AirportRepository;
 
 // @ExtendWith(MockitoExtension.class)
 @SpringBootTest
+@WebAppConfiguration
 @Log4j2
 public class AirportControllerTest
 {
@@ -86,7 +88,7 @@ public class AirportControllerTest
             .willReturn( Optional.ofNullable( null ));
 
         final MockHttpServletResponse response = mvc.perform(
-            get("/{id}", 999999 )
+            get("/location/airport/{id}", 999999 )
                 .accept( MediaType.APPLICATION_JSON ))
             .andExpect(status().isNotFound() )
             .andReturn().getResponse();
@@ -128,7 +130,7 @@ public class AirportControllerTest
 
         // --- When
         final MockHttpServletResponse response = mvc.perform(
-            get("/{id}", 1234 )
+            get("/location/airport/{id}", 1234 )
                 .accept( MediaType.APPLICATION_JSON ))
             .andExpect( status().isOk() )
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -150,7 +152,7 @@ public class AirportControllerTest
     @Test
     void evaluatesPageableParameter() throws Exception
     {
-        mvc.perform(get("/")
+        mvc.perform(get("/location/airport/")
             .param("page", "5")
             .param("size", "10")
             .param("sort", "id,desc")   // <-- no space after comma!
@@ -172,7 +174,7 @@ public class AirportControllerTest
 	@Test
 	void setsUpperPageLimit() throws Exception {
 
-		mvc.perform(get("/")
+		mvc.perform(get("/location/airport/")
 				.param("size", "10000"))
 				.andExpect(status().isOk());
 
@@ -186,7 +188,7 @@ public class AirportControllerTest
 	@Test
 	void evaluatesPageableDefault() throws Exception {
 
-		mvc.perform(get("/"))
+		mvc.perform(get("/location/airport/"))
 				.andExpect(status().isOk());
 
 		ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
@@ -271,7 +273,7 @@ public class AirportControllerTest
             .willReturn( Collections.emptyList());
 
         final MockHttpServletResponse response = mvc.perform(
-            get("/" ))
+            get("/location/airport" ))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk() )
             .andExpect(jsonPath("$").doesNotExist())

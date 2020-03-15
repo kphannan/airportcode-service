@@ -25,7 +25,8 @@ public interface AirportCodeIcaoRepository extends JpaRepository<AirportCodeIcao
     @Query( "from #{#entityName} a where a.icaoCode = :icaoCode" )
     Optional<AirportCodeIcao> findById( @Param("icaoCode") String icaoCode );
 
-    @Query( "FROM #{#entityName} a WHERE a.icaoCode IS NOT NULL AND a.icaoCode != '' AND a.icaoCode != '0'")
+    // @Query( "FROM #{#entityName} a WHERE a.icaoCode IS NOT NULL AND a.icaoCode != '' AND a.icaoCode != '0'")
+    @Query( "FROM #{#entityName} a WHERE a.icaoCode IS NOT NULL AND LENGTH(a.icaoCode) = 4 AND SUBSTRING(a.icaoCode, 1,1 ) >= 'A' AND SUBSTRING(a.icaoCode, 2,1 ) >= 'A' AND SUBSTRING(a.icaoCode, 3,1 ) >= 'A' AND SUBSTRING(a.icaoCode, 4,1 ) >= 'A'")
     // @Query( "FROM #{#entityName} a WHERE a.icaoCode IS NOT NULL AND a.icaoCode != '' AND a.icaoCode != '0' AND iata_code NOT LIKE '%-'  AND iata_code NOT LIKE '%2'  AND iata_code NOT LIKE '%4'  AND iata_code NOT LIKE '%7'")
     // @Query( "FROM #{#entityName} a WHERE a.icaoCode #{MATCHES '[A-Z]{3}'}")
     Page<AirportCodeIcao> findAll( Pageable paging );
