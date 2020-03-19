@@ -8,6 +8,8 @@ package com.airline.locationservice.controller;
 // import static org.junit.jupiter.api.Assertions.assertThrows;
 // import static org.mockito.Mockito.when;
 
+import static org.hamcrest.Matchers.*;
+
 // import static org.assertj.core.api.Assertions.*;
 
 // import static org.assertj.core.api.BDDAssertions.then;
@@ -24,6 +26,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+// import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
@@ -38,13 +42,16 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 // import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 // import org.junit.jupiter.api.extension.ExtendWith;
 // import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 // import org.springframework.boot.test.mock.mockito.MockBean;
 // import org.springframework.data.web.JsonPath;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.JsonPath;
 import org.springframework.http.MediaType;
 // import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 // import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
@@ -62,6 +69,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.http.*;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import lombok.extern.log4j.Log4j2;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -74,14 +84,30 @@ import com.airline.locationservice.persistence.repository.AirportCodeIcaoReposit
 
 
 
+// @ExtendWith(MockitoExtension.class)
+// @SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
+// // @WebMvcTest(controllers = LocationControllerIcao.class)
+// // @EnableSpringDataWebSupport
+// // @ContextConfiguration(classes = {
+// //     LocationControllerIcao.class
+// // })
+// @WebAppConfiguration
+
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
-// @WebMvcTest(controllers = LocationControllerIcao.class)
-// @EnableSpringDataWebSupport
-// @ContextConfiguration(classes = {
-//     LocationControllerIcao.class
-// })
 @WebAppConfiguration
+
+// @WebMvcTest(controllers = LocationControllerIata.class)
+// @EnableJpaRepositories(basePackages="com.airline.locationservice",
+// entityManagerFactoryRef="emf")
+// @EnableJpaRepositories(basePackages="com.airline.locationservice")
+// @EnableSpringDataWebSupport
+
+
+@AutoConfigureMockMvc
+// @ContextConfiguration(classes = {AirportCodeIataRepository.class, LocationControllerIata.class})
+// @WebMvcTest
+@Log4j2
 public class LocationControllerIcaoTest
 {
     @Autowired
@@ -90,7 +116,7 @@ public class LocationControllerIcaoTest
     private MockMvc   mvc;
 
     // mock repository
-    @Mock
+    @MockBean
     AirportCodeIcaoRepository repository;
 
     @InjectMocks
@@ -155,7 +181,8 @@ public class LocationControllerIcaoTest
             get("/location/airport/icao" ))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk() )
-            .andExpect(content().json("[]"))
+            .andExpect(jsonPath("$.content").isArray())
+            .andExpect(jsonPath("$.content", hasSize(0)))  // hamcrest
             .andReturn().getResponse();
     }
 
@@ -181,7 +208,10 @@ public class LocationControllerIcaoTest
         final MockHttpServletResponse response = mvc.perform(
             get("/location/airport/icao" ))
             .andExpect(status().isOk() )
-            .andExpect(content().json("[{icaoAirportCode: \"OERK\"}]"))
+            .andExpect(jsonPath("$.content").isArray())
+            .andExpect(jsonPath("$.content", hasSize(0)))  // hamcrest
+            .andExpect(jsonPath("$.content", hasItem("OERK")))  // hamcrest
+            // .andExpect(content().json("[{icaoAirportCode: \"OERK\"}]"))
             // .andExpect( jsonPath("$.icaoAirportCode", equalTo( "KATL")))
             .andReturn().getResponse();
 

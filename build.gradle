@@ -3,6 +3,8 @@ buildscript {
     ext {
         lombokVersion      = '1.18.8'
         junitVersion       = '5.5.2'
+        mockitoVersion     = '3.3.3'
+        assertJVersion     = '3.15.0'
         hamcrestVersion    = '2.2'
         serenityVersion    = '2.0.83'
         checkstyleVersion  = '8.26'
@@ -99,23 +101,13 @@ def changeLog = "$projectDir/src/main/resources/db/changelog/db.changelog-master
 
 dependencies {
 
+    // ----- Libraries that are not in a repository -----
 	implementation project( ":airline-core" )
-    // implementation( 'com.airport:airport-core:0.0.1-SNAPSHOT' )
+    // implementation( 'com.airport:airline-core:0.0.1-SNAPSHOT' )
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:28.0-jre'
 
-    // Use JUnit Jupiter API for testing.
-    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
-
-    // Use JUnit Jupiter Engine for testing.
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
-
-    // https://mvnrepository.com/artifact/org.hamcrest/hamcrest
-    testImplementation("org.hamcrest:hamcrest:${hamcrestVersion}")
-
-    testImplementation( "com.intuit.karate:karate-junit5:${karateVersion}" )
-    testImplementation( "com.intuit.karate:karate-apache:${karateVersion}" )
 
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
     testImplementation("org.projectlombok:lombok:${lombokVersion}")
@@ -125,13 +117,13 @@ dependencies {
     // testImplementation("net.serenity-bdd:serenity-core:${serenityVersion}" )
     // testImplementation("net.serenity-bdd:serenity-junit:${serenityVersion}" )
 
+    // ----- Dependencies -----
+    //   --- Spring ---
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	// implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-
-	implementation 'org.liquibase:liquibase-core'
 
 	implementation 'org.springframework.cloud:spring-cloud-starter'
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
@@ -145,10 +137,14 @@ dependencies {
 	// implementation 'org.springframework.cloud:spring-cloud-starter-zipkin'
 	// implementation 'org.springframework.data:spring-data-rest-hal-browser'
 
-    // --- Metrics instrumentation
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+    //   --- Database change management ---
+	implementation 'org.liquibase:liquibase-core'
+
+
+    //   --- Metrics instrumentation
 	// Performance instrumentation
 	// https://mvnrepository.com/artifact/io.micrometer/micrometer-core
 	implementation( "io.micrometer:micrometer-core:${micrometerVersion}" )
@@ -164,10 +160,25 @@ dependencies {
     // implementation 'mysql:mysql-connector-java'
 	runtimeOnly 'com.h2database:h2'
 
+    // ----- Unit Testing -----
+    // Use JUnit Jupiter API for testing.
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+
+    // Use JUnit Jupiter Engine for testing.
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+
+    testImplementation( "org.mockito:mockito-core:${mockitoVersion}")
+
+    // https://mvnrepository.com/artifact/org.hamcrest/hamcrest
+    testImplementation("org.hamcrest:hamcrest:${hamcrestVersion}")
+    testImplementation( "org.assertj:assertj-core:${assertJVersion}")
+
+    testImplementation( "com.intuit.karate:karate-junit5:${karateVersion}" )
+    testImplementation( "com.intuit.karate:karate-apache:${karateVersion}" )
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
-	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+	// testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 }
 
 dependencyManagement {
