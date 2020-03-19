@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Airport
+public class Airport // extends Auditable<>
 {
     /**
      * T Internal OurAirports integer identifier for the airport. This will

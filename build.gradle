@@ -143,6 +143,8 @@ dependencies {
     //   --- Database change management ---
 	implementation 'org.liquibase:liquibase-core'
 
+    //   --- Enable auditing of DB content
+    // implementation( "org.hibernate:hibernate-envers:${hibernate.version}5.3.1.Final" )
 
     //   --- Metrics instrumentation
 	// Performance instrumentation
