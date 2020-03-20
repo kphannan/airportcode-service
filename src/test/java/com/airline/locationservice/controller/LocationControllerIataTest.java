@@ -35,12 +35,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 // import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
+// import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+// import org.junit.jupiter.api.BeforeAll;
+// import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 // import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -67,22 +67,22 @@ import org.springframework.http.*;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import liquibase.Liquibase;
+// import liquibase.Liquibase;
 import lombok.extern.log4j.Log4j2;
 
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
+// import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.airline.locationservice.persistence.model.AirportCodeIata;
 import com.airline.locationservice.persistence.repository.AirportCodeIataRepository;
 // import com.airline.core.location.AirportCode;
-import com.airline.core.location.IATAAirportCode;
+// import com.airline.core.location.IATAAirportCode;
 
 
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.context.ContextConfiguration;
+// import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+// import org.springframework.test.context.ContextConfiguration;
 
 
 
@@ -137,10 +137,9 @@ public class LocationControllerIataTest {
     public void getSingleKnownIataAirportCode()
         throws Exception
     {
-        final IATAAirportCode airportCode = new IATAAirportCode( "ATL" );
-        assertThat( airportCode ).isNotNull();
+        // final IATAAirportCode airportCode = new IATAAirportCode( "ATL" );
+        // assertThat( airportCode ).isNotNull();
 
-        // when( repository.findById("ATL")).thenReturn( Optional.of( new AirportCodeIata( airportCode.getAirportCode() )));
         given( repository.findById("ATL"))
             .willReturn( Optional.of( new AirportCodeIata( "ATL" )));
 
@@ -148,12 +147,8 @@ public class LocationControllerIataTest {
             get("/location/airport/iata/{id}", "ATL" )
                 .accept( MediaType.APPLICATION_JSON ))
             .andExpect(status().isOk() )
-            // .andExpect( jsonPath("$.iataAirportCode", equalTo( "ATL")))
-            .andDo(MockMvcResultHandlers.print())
-            .andExpect(status().isOk() )
-            // .andExpect(jsonPath("$.content").isArray())
-            // .andExpect(jsonPath("$.content", hasSize(1)))  // hamcrest
-            .andExpect(jsonPath("$.content", hasItem("NRT")))  // hamcrest
+            // .andDo(MockMvcResultHandlers.print())
+            .andExpect(jsonPath("$.iataAirportCode", equalTo("ATL")))  // hamcrest
             .andReturn().getResponse();
 
         log.error( "response: '" + response.getContentAsString() + "'");
@@ -180,11 +175,12 @@ public class LocationControllerIataTest {
                             .accept( MediaType.APPLICATION_JSON ))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isNotFound() )
-                .andExpect(status().isOk() )
+                // .andExpect(status().isOk() )
                 // .andExpect(jsonPath("$.content").isArray())
                 // .andExpect(jsonPath("$.content", hasSize(1)))  // hamcrest
-                .andExpect(jsonPath("$.content", hasItem("NRT")))  // hamcrest
-                    .andReturn().getResponse();
+                // .andExpect(jsonPath("$.content", hasItem("NRT")))  // hamcrest
+                .andExpect(jsonPath("$").doesNotExist())  // hamcrest
+                .andReturn().getResponse();
     }
 
     
@@ -203,12 +199,11 @@ public class LocationControllerIataTest {
             get("/location/airport/iata" ))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk() )
-            // .andExpect(content().json("[]"))
             .andExpect(jsonPath("$.content").isArray())
             .andExpect(jsonPath("$.content", hasSize(0)))  // hamcrest
             .andReturn().getResponse();
 
-        verify( repository, times(99)).findAll(any(Pageable.class));   // Mockito
+        verify( repository, times(1)).findAll(any(Pageable.class));   // Mockito
     }
 
 
@@ -232,15 +227,11 @@ public class LocationControllerIataTest {
 
         final MockHttpServletResponse response = mvc.perform(
             get("/location/airport/iata" ))
-            .andDo(MockMvcResultHandlers.print())
-            .andExpect(status().isOk() )
-            // .andExpect(content().json("[{iataAirportCode: \"NRT\"}]"))
-            // .andExpect( jsonPath("$.iataAirportCode", equalTo( "ATL")))
-            .andDo(MockMvcResultHandlers.print())
+            // .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk() )
             .andExpect(jsonPath("$.content").isArray())
             .andExpect(jsonPath("$.content", hasSize(1)))  // hamcrest
-            .andExpect(jsonPath("$.content", hasItem("NRT")))  // hamcrest
+            .andExpect(jsonPath("$.content[0].iataAirportCode", equalTo("NRT")))  // hamcrest
             .andReturn().getResponse();
     }
 
@@ -268,7 +259,7 @@ public class LocationControllerIataTest {
 
         final MockHttpServletResponse response = mvc.perform(
             get("/location/airport/iata" ))
-            .andDo(MockMvcResultHandlers.print())
+            // .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk() )
             // .andExpect( content(). )
             // .andExpect(content().json("[{iataAirportCode: \"NRT\"}]"))
@@ -276,12 +267,13 @@ public class LocationControllerIataTest {
             .andExpect(status().isOk() )
             .andExpect(jsonPath("$.content").isArray())
             .andExpect(jsonPath("$.content", hasSize(5)))  // hamcrest
-            .andExpect(jsonPath("$.content", hasItem("NRT")))  // hamcrest
-            .andExpect(jsonPath("$.content", hasItem("LAX")))  // hamcrest
-            .andExpect(jsonPath("$.content", hasItem("ORD")))  // hamcrest
-            .andExpect(jsonPath("$.content", hasItem("MSP")))  // hamcrest
-            .andExpect(jsonPath("$.content", hasItem("ATL")))  // hamcrest
-            .andExpect(jsonPath("$.content", hasItem("YYZ")))  // hamcrest
+            // .andExpect(jsonPath("$.content", hasItem("{\"iataAirportCode\":\"NRT\"}")))  // hamcrest
+            // .andExpect(jsonPath("$.content", hasItem("LAX")))  // hamcrest
+            // .andExpect(jsonPath("$.content", hasItem("ORD")))  // hamcrest
+            // .andExpect(jsonPath("$.content", hasItem("MSP")))  // hamcrest
+            // .andExpect(jsonPath("$.content", hasItem("ATL")))  // hamcrest
+            // .andExpect(jsonPath("$.content", hasItem("YYZ")))  // hamcrest
+            .andExpect(jsonPath("$.content[*].iataAirportCode", containsInAnyOrder("NRT", "ATL", "MSP", "ORD", "LAX")))  // hamcrest
             .andReturn().getResponse();
 
         log.error( "response: '" + response.getContentAsString() + "'");

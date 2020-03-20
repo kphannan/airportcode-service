@@ -33,9 +33,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-// import java.util.Collections;
 import java.util.List;
-// import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -44,29 +42,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 // import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-// import org.junit.jupiter.api.extension.ExtendWith;
-// import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-// import org.springframework.boot.test.mock.mockito.MockBean;
-// import org.springframework.data.web.JsonPath;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.JsonPath;
 import org.springframework.http.MediaType;
-// import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-// import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-// import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.web.WebAppConfiguration;
-// import org.springframework.data.domain.PageRequest;
-// import org.springframework.boot.test.mock.mockito.Mock;
 import org.springframework.test.web.servlet.MockMvc;
 // import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletResponse;
-// import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.http.*;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -78,35 +65,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.airline.locationservice.persistence.model.AirportCodeIcao;
 import com.airline.locationservice.persistence.repository.AirportCodeIcaoRepository;
-// import com.airline.core.location.AirportCode;
-// import com.airline.core.location.ICAOAirportCode;
 
 
 
 
-// @ExtendWith(MockitoExtension.class)
-// @SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
-// // @WebMvcTest(controllers = LocationControllerIcao.class)
-// // @EnableSpringDataWebSupport
-// // @ContextConfiguration(classes = {
-// //     LocationControllerIcao.class
-// // })
-// @WebAppConfiguration
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
 @WebAppConfiguration
-
-// @WebMvcTest(controllers = LocationControllerIata.class)
-// @EnableJpaRepositories(basePackages="com.airline.locationservice",
-// entityManagerFactoryRef="emf")
-// @EnableJpaRepositories(basePackages="com.airline.locationservice")
-// @EnableSpringDataWebSupport
-
-
 @AutoConfigureMockMvc
-// @ContextConfiguration(classes = {AirportCodeIataRepository.class, LocationControllerIata.class})
-// @WebMvcTest
 @Log4j2
 public class LocationControllerIcaoTest
 {
@@ -136,18 +103,15 @@ public class LocationControllerIcaoTest
     public void getSingleKnownIcaoAirportCode()
         throws Exception
     {
-        // final ICAOAirportCode airportCode = new ICAOAirportCode( "KATL" );
-        // assertThat( airportCode ).isNotNull();
-
         given( repository.findById("KATL"))
             .willReturn( Optional.of( new AirportCodeIcao( "KATL" )));
 
-        final MockHttpServletResponse response =
-            mvc.perform( get("/location/airport/icao/{id}", "KATL" )
-                             .accept( MediaType.APPLICATION_JSON ))
-                .andExpect(status().isOk() )
-                // .andExpect( jsonPath("$.icaoAirportCode", equalTo( "KATL")))
-                .andReturn().getResponse();
+        mvc.perform( get("/location/airport/icao/{id}", "KATL" )
+                            .accept( MediaType.APPLICATION_JSON ))
+            .andExpect(status().isOk() )
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(jsonPath("$.icaoAirportCode", equalTo("KATL")))  // hamcrest
+            .andReturn().getResponse();
     }
 
 
@@ -162,6 +126,7 @@ public class LocationControllerIcaoTest
             get("/location/airport/icao/{id}", "KMSP" )
                 .accept( MediaType.APPLICATION_JSON ))
             .andExpect(status().isNotFound() )
+            .andExpect(jsonPath("$").doesNotExist())  // hamcrest
             .andReturn().getResponse();
     }
 
@@ -209,10 +174,8 @@ public class LocationControllerIcaoTest
             get("/location/airport/icao" ))
             .andExpect(status().isOk() )
             .andExpect(jsonPath("$.content").isArray())
-            .andExpect(jsonPath("$.content", hasSize(0)))  // hamcrest
-            .andExpect(jsonPath("$.content", hasItem("OERK")))  // hamcrest
-            // .andExpect(content().json("[{icaoAirportCode: \"OERK\"}]"))
-            // .andExpect( jsonPath("$.icaoAirportCode", equalTo( "KATL")))
+            .andExpect(jsonPath("$.content", hasSize(1)))  // hamcrest
+            .andExpect(jsonPath("$.content[0].icaoAirportCode", equalTo("OERK")))  // hamcrest
             .andReturn().getResponse();
 
             then(repository)

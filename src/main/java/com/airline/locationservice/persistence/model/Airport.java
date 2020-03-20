@@ -1,34 +1,43 @@
 package com.airline.locationservice.persistence.model;
 
 import java.math.BigDecimal;
-import java.util.Date;
+// import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
+// import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
+// import org.springframework.data.annotation.CreatedBy;
+// import org.springframework.data.annotation.CreatedDate;
+// import org.springframework.data.annotation.LastModifiedBy;
+// import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import com.airline.locationservice.persistence.audit.Auditable;
+
+
 @Entity
+// @Audited
 @Table( name = "AIRPORTS" )
 @Data
+@EqualsAndHashCode (callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Airport // extends Auditable<>
+@EntityListeners(AuditingEntityListener.class)
+public class Airport extends Auditable<String>
 {
     /**
      * T Internal OurAirports integer identifier for the airport. This will

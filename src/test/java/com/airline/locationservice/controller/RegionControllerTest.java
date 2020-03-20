@@ -8,10 +8,11 @@ package com.airline.locationservice.controller;
 // import static org.junit.jupiter.api.Assertions.assertThrows;
 // import static org.mockito.Mockito.when;
 
+import static org.hamcrest.Matchers.*;
 import static org.assertj.core.api.Assertions.*;
 
 // import static org.assertj.core.api.BDDAssertions.then;
-// import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.any;
 // import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.*;
 // import static org.mockito.Mockito.when;
@@ -22,14 +23,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import com.airline.locationservice.persistence.model.Region;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -37,63 +47,57 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import lombok.extern.log4j.Log4j2;
+
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
+// import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.airline.locationservice.persistence.repository.RegionsRepository;
 
-// @ExtendWith(MockitoExtension.class)
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
+@SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
 @WebAppConfiguration
+@AutoConfigureMockMvc
+@Log4j2
 public class RegionControllerTest
 {
-    // @Autowired
+    @Autowired
     private MockMvc   mvc;
 
     // mock repository
-    @Mock
+    @MockBean
     RegionsRepository repository;
 
     @InjectMocks
     RegionController    service;
-    // private AirportCodeRes
-
-    @BeforeEach
-    public void setup()
-    {
-        mvc = MockMvcBuilders.standaloneSetup(service)
-                .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
-                // .setControllerAdvice(new SuperHeroExceptionHandler())
-                // .addFilters(new SuperHeroFilter())
-                .build();
-    }
 
 
     @Test
     public void getSingleKnownRegionCode()
         throws Exception
     {
-        // 306086 - is the DB key for Region 'US-GA'
-        // final IATAAirportCode airportCode = new IATAAirportCode( "ATL" );
-        // assertThat( airportCode ).isNotNull();
+        Region region = new Region();
+        region.setContinent("NA");
+        region.setCountry("FooLand");
+        region.setName("Foo");
+        region.setId( 306086 );
 
-        // when( repository.findById("ATL")).thenReturn( Optional.of( new AirportCodeIata( airportCode.getAirportCode() )));
-        given( repository.findById(306086)).willReturn( Optional.of( new Region( )));
+        given( repository.findById(306086)).willReturn( Optional.of( region ));
 
         final MockHttpServletResponse response = mvc.perform(
             get("/location/region/{id}", 306086 )
                 .accept( MediaType.APPLICATION_JSON ))
             .andExpect(status().isOk() )
-            // .andExpect( jsonPath("$.iataAirportCode", equalTo( "ATL")))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect( jsonPath("$.id", equalTo( 306086 )))
+            .andExpect( jsonPath("$.country", equalTo( "FooLand" )))
+            .andExpect( jsonPath("$.name", equalTo( "Foo" )))
             .andReturn().getResponse();
 
-        // assert the response contains the airport code
-        // assertThat(response)
-        //     .isNotNull()
-        //     .has()
-
-        // assertThat(response).ok();
-        // LocationControllerIata controller = new LocationControllerIata( mockRepository );
+            then(repository)
+                .should()
+                .findById(anyInt());
     }
 
 
@@ -120,7 +124,7 @@ public class RegionControllerTest
 
         final MockHttpServletResponse response = mvc.perform(
             get("/location/region" ))
-            .andDo(MockMvcResultHandlers.print())
+            // .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk() )
             // .andExpect(content().) //  .json("[]"))
             .andExpect(jsonPath("$").doesNotExist())
@@ -129,170 +133,75 @@ public class RegionControllerTest
     }
 
 
+    // ----- By Contient -----
+    @Test
+    public void getRegionByContinent()
+        throws Exception
+    {
+        Region region = new Region();
+        region.setContinent("NA");
+        region.setCountry("FooLand");
+        region.setName("Foo");
+        region.setId( 306086 );
+        List<Region> regionList = new ArrayList<>();
+        regionList.add( region );
+        Page<Region> foundPage = new PageImpl<>(regionList);
 
-    // @Test
-    // public void getAllAiportCodesHasOneEntry()
-    //     throws Exception
-    // {
-    //     final String[] codeStringList = { "NRT" };
+        given( repository.findByContinent( anyString(), any(Pageable.class)))
+            .willReturn( foundPage );
 
-    //     // Build a list of IATA airport code objects from the data layer
-    //     List<AirportCodeIata> listOfIataAirportCodes =
-    //         Arrays.asList( codeStringList )
-    //               .stream()
-    //               .map( a -> new AirportCodeIata( a ))
-    //               .collect(Collectors.toList());
-        
-    //     given( repository.findAll()).willReturn( listOfIataAirportCodes );
+        final MockHttpServletResponse response = mvc.perform(
+            get("/location/region/byContinent/{continent}", "NA" ))
+            .andDo(MockMvcResultHandlers.print())
+            // .andExpect(status().isOk() )
 
-    //     final MockHttpServletResponse response = mvc.perform(
-    //         get("/location/region" ))
-    //         .andExpect(status().isOk() )
-    //         .andExpect(content().json("[{iataAirportCode: \"NRT\"}]"))
-    //         // .andExpect( jsonPath("$.iataAirportCode", equalTo( "ATL")))
-    //         .andReturn().getResponse();
-    // }
-
-
-
-    // @Test
-    // public void deleteKnownAirportCode()
-    //     throws Exception
-    // {
-    //     final String targetAirport = "MSP";
-    //     // IATAAirportCode airportCode = new IATAAirportCode( "ATL" );
-    //     // assertThat( airportCode ).isNotNull();
-
-    //     given( repository.findById(targetAirport)).willReturn( Optional.of( new AirportCodeIata( targetAirport )));
-
-    //     final MockHttpServletResponse response = mvc.perform(
-    //         delete("/airport/iata/{id}", targetAirport )
-    //             .accept( MediaType.APPLICATION_JSON ))
-    //         .andExpect(status().isNoContent() )
-    //         .andReturn().getResponse();
-    // }
-
-    // @Test
-    // public void deleteAnUnknownAirportCode()
-    //     throws Exception
-    // {
-    //     final String targetAirport = "MSP";
-
-    //     given( repository.findById(targetAirport)).willReturn( Optional.ofNullable( null ));
-
-    //     final MockHttpServletResponse response = mvc.perform(
-    //         delete("/airport/iata/{id}", targetAirport )
-    //             .accept( MediaType.APPLICATION_JSON ))
-    //         .andExpect(status().isNotFound() )
-    //         .andReturn().getResponse();
-    // }
-
-
-    // @Test
-    // public void addNewIataAirportCodeYYZ()
-    //     throws Exception
-    // {
-    //     final IATAAirportCode airportCode = new IATAAirportCode( "ATL" );
-    //     assertThat( airportCode ).isNotNull();
-
-    //     final String json = "{ \"iataAirportCode\": \"YYZ\"}";
-
-    //     AirportCodeIata iata = new AirportCodeIata( "YYZ" );
-    //     IATAAirportCode iataAirportCode = new IATAAirportCode("YYZ");
-
-    //     given( repository.save( iata )).willReturn( iata );
-
-    //     final MockHttpServletResponse response = mvc.perform(
-    //         post("/airport/iata" )
-    //             // .content(iataAirportCode)
-    //             .content(json)
-    //             .contentType(MediaType.APPLICATION_JSON)
-    //             .accept( MediaType.APPLICATION_JSON ))
-    //         .andExpect(status().isCreated() )
-    //         // .andExpect( jsonPath("$.iataAirportCode", equalTo( "ATL")))
-    //         .andReturn().getResponse();
-    // }
+            .andExpect( jsonPath("$.content").isArray())
+            .andExpect( jsonPath("$.content", hasSize(1)))  // hamcrest
+            .andExpect( jsonPath("$.content[0].id", equalTo( 306086 )))
+            .andExpect( jsonPath("$.content[0].country", equalTo( "FooLand" )))
+            .andExpect( jsonPath("$.content[0].name", equalTo( "Foo" )))
+            // .andExpect(jsonPath("$").doesNotExist())
+            // .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andReturn().getResponse();
+    }
 
 
 
-    // @Test
-    // public void updateExistingAirportCode()
-    //     throws Exception
-    // {
-    //     // final IATAAirportCode airportCode = new IATAAirportCode( "ATL" );
-    //     // assertThat( airportCode ).isNotNull();
 
-    //     final String json = "{ \"iataAirportCode\": \"YYZ\"}";
+    // ----- By Country -----
+    @Test
+    public void getRegionByCountry()
+        throws Exception
+    {
+        Region region = new Region();
+        region.setContinent("NA");
+        region.setCountry("FooLand");
+        region.setName("Foo");
+        region.setId( 306086 );
+        List<Region> regionList = new ArrayList<>();
+        regionList.add( region );
+        Page<Region> foundPage = new PageImpl<>(regionList);
 
-    //     AirportCodeIata iata = new AirportCodeIata( "YYZ" );
-    //     IATAAirportCode iataAirportCode = new IATAAirportCode("YYZ");
+        given( repository.findByCountry( anyString(), any(Pageable.class)))
+            .willReturn( foundPage );
 
-    //     given( repository.save( iata ))
-    //         .willReturn( iata );
-    //     given( repository.findById(iata.getIataCode()))
-    //         .willReturn( Optional.of( iata ));
+        final MockHttpServletResponse response = mvc.perform(
+            get("/location/region/byCountry/{country}", "CAN" ))
+            .andDo(MockMvcResultHandlers.print())
+            // .andExpect(status().isOk() )
 
-    //     final MockHttpServletResponse response = mvc.perform(
-    //         put("/airport/iata/{id}", iataAirportCode.getAirportCode() )
-    //             // .content(iataAirportCode)
-    //             .content(json)
-    //             .contentType(MediaType.APPLICATION_JSON)
-    //             .accept( MediaType.APPLICATION_JSON ))
-    //         .andExpect(status().isOk() )
-    //         // .andExpect( jsonPath("$.iataAirportCode", equalTo( "ATL")))
-    //         .andReturn().getResponse();
-    // }
-
-    // @Test
-    // public void updateNonExistingAirportCodeIsReallyAnAdd()
-    //     throws Exception
-    // {
-    //     final String json = "{ \"iataAirportCode\": \"YYZ\"}";
-
-    //     AirportCodeIata iata = new AirportCodeIata( "YYZ" );
-    //     IATAAirportCode iataAirportCode = new IATAAirportCode("YYZ");
-
-    //     given( repository.findById(iata.getIataCode()))
-    //         .willReturn( Optional.ofNullable(null));
-    //     given( repository.save( iata ))
-    //         .willReturn( iata );
-
-    //     final MockHttpServletResponse response = mvc.perform(
-    //         put("/airport/iata/{id}", iataAirportCode.getAirportCode() )
-    //             // .content(iataAirportCode)
-    //             .content(json)
-    //             .contentType(MediaType.APPLICATION_JSON)
-    //             .accept( MediaType.APPLICATION_JSON ))
-    //         .andExpect(status().isCreated() )
-    //         // .andExpect( jsonPath("$.iataAirportCode", equalTo( "ATL")))
-    //         .andReturn().getResponse();
-    // }
+            .andExpect( jsonPath("$.content").isArray())
+            .andExpect( jsonPath("$.content", hasSize(1)))  // hamcrest
+            .andExpect( jsonPath("$.content[0].id", equalTo( 306086 )))
+            .andExpect( jsonPath("$.content[0].country", equalTo( "FooLand" )))
+            .andExpect( jsonPath("$.content[0].name", equalTo( "Foo" )))
+            .andReturn().getResponse();
+    }
 
 
-    // @Test
-    // public void updateAirportCodeWrongKeyIsInvalid()
-    //     throws Exception
-    // {
-    //     final String json = "{ \"iataAirportCode\": \"LAX\"}";
 
-    //     AirportCodeIata iata = new AirportCodeIata( "YYZ" );
-    //     IATAAirportCode iataAirportCode = new IATAAirportCode("YYZ");
 
-    //     given( repository.findById(iata.getIataCode()))
-    //         .willReturn( Optional.ofNullable(null));
-    //     given( repository.save( iata ))
-    //         .willReturn( iata );
 
-    //     final MockHttpServletResponse response = mvc.perform(
-    //         put("/airport/iata/{id}", iataAirportCode.getAirportCode() )
-    //             // .content(iataAirportCode)
-    //             .content(json)
-    //             .contentType(MediaType.APPLICATION_JSON)
-    //             .accept( MediaType.APPLICATION_JSON ))
-    //         .andExpect(status().isBadRequest() )
-    //         // .andExpect( jsonPath("$.iataAirportCode", equalTo( "ATL")))
-    //         .andReturn().getResponse();
-    // }
 
 
 

@@ -1,4 +1,4 @@
-package com.airline.locationservice.persistence.model;
+package com.airline.locationservice.persistence.audit;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -23,11 +23,12 @@ import lombok.Data;
 @Data
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class Auditable<E extends Audit>
+// public abstract class Auditable<E extends Audit>
+public abstract class Auditable<U>
 {
     @Column(name = "ADDED_BY")
     @CreatedBy
-    private String addedBy;
+    private U addedBy;
 
     @Column(name = "ADDED_ON")
     @Temporal(TemporalType.TIMESTAMP)
@@ -36,22 +37,22 @@ public abstract class Auditable<E extends Audit>
 
     @Column(name = "MODIFIED_BY")
     @LastModifiedBy
-    private String modifiedBy;
+    private U modifiedBy;
 
     @Column(name = "MODIFIED_ON")
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private Date modifiedOn;
 
-    /**
-     * Returns the id of the entity.
-     * @return
-     */
-    public abstract Long getId();
+    // /**
+    //  * Returns the id of the entity.
+    //  * @return
+    //  */
+    // public abstract Long getId();
 
-    /**
-     * Create the audit record.
-     * @return
-     */
-    public abstract E createAudit();
+    // /**
+    //  * Create the audit record.
+    //  * @return
+    //  */
+    // public abstract E createAudit();
 }

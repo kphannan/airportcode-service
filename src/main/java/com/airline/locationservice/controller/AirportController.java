@@ -57,16 +57,6 @@ public class AirportController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("")
-    @ResponseStatus( HttpStatus.CREATED )
-    // ResponseEntity<Airport> newAirportCode(@RequestBody Airport newAirport) {
-    Airport newAirportCode(@RequestBody Airport newAirport) {
-        Airport airport = repository.save(newAirport);
-
-        // Return 201 (Created)
-        // return new ResponseEntity.created(airport).build();
-        return airport;
-    }
 
     @GetMapping("/{id}")
     ResponseEntity<Optional<Airport>> one(@PathVariable Long id) {
@@ -77,6 +67,19 @@ public class AirportController {
             return ResponseEntity.notFound().build();
     }
 
+
+    // @PostMapping("")
+    // @ResponseStatus( HttpStatus.CREATED )
+    // // ResponseEntity<Airport> newAirportCode(@RequestBody Airport newAirport) {
+    // Airport newAirportCode(@RequestBody Airport newAirport) {
+    //     Airport airport = repository.save(newAirport);
+
+    //     // Return 201 (Created)
+    //     // return new ResponseEntity.created(airport).build();
+    //     return airport;
+    // }
+    
+    
     // @PutMapping("/{id}")
     // ResponseEntity<AirportCode> replaceAirportCode(@RequestBody ICAOAirportCode newAirportCode,
     //         @PathVariable String id) {

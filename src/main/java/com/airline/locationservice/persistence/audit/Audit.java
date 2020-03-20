@@ -1,4 +1,4 @@
-package com.airline.locationservice.persistence.model;
+package com.airline.locationservice.persistence.audit;
 
 import java.util.Date;
 
