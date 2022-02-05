@@ -25,7 +25,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import com.airline.locationservice.persistence.audit.Auditable;
+// import com.airline.locationservice.persistence.audit.Auditable;
 
 
 @Entity
@@ -37,7 +37,7 @@ import com.airline.locationservice.persistence.audit.Auditable;
 @AllArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-public class Airport extends Auditable<String>
+public class Airport //extends Auditable<String>
 {
     /**
      * T Internal OurAirports integer identifier for the airport. This will
