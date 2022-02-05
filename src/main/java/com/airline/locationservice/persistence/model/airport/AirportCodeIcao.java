@@ -1,4 +1,4 @@
-package com.airline.locationservice.persistence.model;
+package com.airline.locationservice.persistence.model.airport;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

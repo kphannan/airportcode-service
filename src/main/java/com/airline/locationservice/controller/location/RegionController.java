@@ -1,14 +1,14 @@
-package com.airline.locationservice.controller;
+package com.airline.locationservice.controller.location;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.airline.locationservice.persistence.model.Region;
+import com.airline.locationservice.persistence.model.location.Region;
 // import com.airline.locationservice.repository.AirportCodeIata;
 // import com.airline.locationservice.repository.AirportCodeIataRepository;
-import com.airline.locationservice.persistence.repository.RegionsRepository;
+import com.airline.locationservice.persistence.repository.location.RegionsRepository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +37,11 @@ public class RegionController
     {
         this.repository = repository;
     }
+
+    // ----- Create -----
+    // ----- Retrieve -----
+    // ----- Update -----
+    // ----- Delete -----
 
 
     // @PageableDefault(size = 10, direction = Sort.Direction.DESC, sort = "someField")

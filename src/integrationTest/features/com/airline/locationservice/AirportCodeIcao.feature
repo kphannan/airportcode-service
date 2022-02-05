@@ -1,5 +1,5 @@
 
-Feature: ICAO Airport code lookup
+Feature: ICAO Airport code CRUD operations
 
     Background:
         * url baseUrl + '/airport/icao'

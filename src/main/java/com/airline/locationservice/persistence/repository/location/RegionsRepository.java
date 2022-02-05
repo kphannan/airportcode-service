@@ -1,4 +1,4 @@
-package com.airline.locationservice.persistence.repository;
+package com.airline.locationservice.persistence.repository.location;
 
 import java.util.Optional;
 
@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
-import com.airline.locationservice.persistence.model.Region;
+import com.airline.locationservice.persistence.model.location.Region;
 
 
 

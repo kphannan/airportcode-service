@@ -1,4 +1,4 @@
-package com.airline.locationservice.persistence.model;
+package com.airline.locationservice.persistence.model.location;
 
 import java.net.URI;
 
@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import com.airline.locationservice.persistence.model.UriConverter;
 
 import lombok.Data;
 

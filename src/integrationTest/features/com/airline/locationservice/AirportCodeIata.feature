@@ -1,5 +1,5 @@
 
-Feature: IATA Airport code lookup
+Feature: IATA Airport code CRUD operations
 
     Background:
         * url baseUrl + '/airport/iata'
@@ -39,7 +39,7 @@ Feature: IATA Airport code lookup
 
 
     # ----- Add airport code (POST) -----
-    Scenario Outline: Add a new IATA airport code
+    Scenario Outline: Add a new IATA airport code "<id>"
         Given path ''
           And request {iataAirportCode: "<id>" }
          When method POST
@@ -84,12 +84,12 @@ Feature: IATA Airport code lookup
 
 
     # ----- Delete -----
-    # Scenario: Add, then delete an IATA airport code
-    #     Given path '/iata'
-    #     And request {iataAirportCode: "SOS" }
-    #     When method POST
-    #     Then status 201
-    #         # now delete it - this is the real test
-    #     Given path '/iata/SOS'
-    #     When method DELETE
-    #     Then status 204
+    Scenario: Add, then delete an IATA airport code "SOS"
+        Given path ''
+        And request {iataAirportCode: "SOS" }
+        When method POST
+        Then status 201
+            # now delete it - this is the real test
+        Given path '/SOS'
+        When method DELETE
+        Then status 204

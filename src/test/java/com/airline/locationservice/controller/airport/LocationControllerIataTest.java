@@ -1,4 +1,4 @@
-package com.airline.locationservice.controller;
+package com.airline.locationservice.controller.airport;
 
 // import static org.hamcrest.MatcherAssert.assertThat;
 // import static org.hamcrest.Matchers.both;
@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.BeforeEach;
 // import org.junit.jupiter.api.BeforeAll;
 // import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,6 +51,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 // import org.springframework.data.web.JsonPath;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 // import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 // import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 // import org.springframework.data.web.config.EnableSpringDataWebSupport;
@@ -71,11 +73,13 @@ import org.springframework.web.context.WebApplicationContext;
 import lombok.extern.log4j.Log4j2;
 
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 // import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.airline.locationservice.persistence.model.AirportCodeIata;
-import com.airline.locationservice.persistence.repository.AirportCodeIataRepository;
+import com.airline.locationservice.controller.airport.LocationControllerIata;
+import com.airline.locationservice.persistence.model.airport.AirportCodeIata;
+import com.airline.locationservice.persistence.repository.airport.AirportCodeIataRepository;
 // import com.airline.core.location.AirportCode;
 // import com.airline.core.location.IATAAirportCode;
 
@@ -87,8 +91,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 
 
 
-@ExtendWith(MockitoExtension.class)
-@SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
+@ExtendWith( MockitoExtension.class )
+// @SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
 @WebAppConfiguration
 
 // @WebMvcTest(controllers = LocationControllerIata.class)
@@ -98,23 +102,22 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 // @EnableSpringDataWebSupport
 
 
-@AutoConfigureMockMvc
+// @AutoConfigureMockMvc
 // @ContextConfiguration(classes = {AirportCodeIataRepository.class, LocationControllerIata.class})
 // @WebMvcTest
 @Log4j2
 public class LocationControllerIataTest {
-    @Autowired
-    private WebApplicationContext webApplicationContext;
+    // @Autowired
+    // private WebApplicationContext webApplicationContext;
 
-    @Autowired
+    // @Autowired
     private MockMvc mvc;
 
     // mock repository
-    @MockBean
+    @Mock
     AirportCodeIataRepository repository;
 
     @InjectMocks
-    // @MockBean
     LocationControllerIata service;
     // private AirportCodeRes
 
@@ -133,6 +136,22 @@ public class LocationControllerIataTest {
     // }
 
 
+    // ----- Before -----
+    @BeforeEach
+    public void setup()
+    {
+        // mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+        //         // .setControllerAdvice(new SuperHeroExceptionHandler())
+        //         // .addFilters(new SuperHeroFilter())
+        //         .build();
+        mvc = MockMvcBuilders.standaloneSetup( service )
+                .setCustomArgumentResolvers( new PageableHandlerMethodArgumentResolver() )
+                // .setControllerAdvice(new SuperHeroExceptionHandler())
+                // .addFilters(new SuperHeroFilter())
+                .build();
+    }
+
+
     @Test
     public void getSingleKnownIataAirportCode()
         throws Exception
@@ -140,16 +159,16 @@ public class LocationControllerIataTest {
         // final IATAAirportCode airportCode = new IATAAirportCode( "ATL" );
         // assertThat( airportCode ).isNotNull();
 
-        given( repository.findById("ATL"))
-            .willReturn( Optional.of( new AirportCodeIata( "ATL" )));
+        given( repository.findById( "ATL" ) )
+            .willReturn( Optional.of( new AirportCodeIata( "ATL" ) ) );
 
-        final MockHttpServletResponse response = mvc.perform(
-            get("/location/airport/iata/{id}", "ATL" )
-                .accept( MediaType.APPLICATION_JSON ))
-            .andExpect(status().isOk() )
-            // .andDo(MockMvcResultHandlers.print())
-            .andExpect(jsonPath("$.iataAirportCode", equalTo("ATL")))  // hamcrest
-            .andReturn().getResponse();
+        final MockHttpServletResponse response =
+            mvc.perform( get( "/location/airport/iata/{id}", "ATL" )
+                            .accept( MediaType.APPLICATION_JSON ) )
+                .andExpect( status().isOk() )
+                // .andDo(MockMvcResultHandlers.print())
+                .andExpect( jsonPath( "$.iataAirportCode", equalTo( "ATL" ) ) )  // hamcrest
+                .andReturn().getResponse();
 
         log.error( "response: '" + response.getContentAsString() + "'");
 
@@ -183,27 +202,27 @@ public class LocationControllerIataTest {
                 .andReturn().getResponse();
     }
 
-    
+
 
     @Test
     public void getAllAiportCodesIsEmpty()
         throws Exception
     {
         List<AirportCodeIata> expected = new ArrayList<>();
-        Page<AirportCodeIata> foundPage = new PageImpl<>(expected);
+        Page<AirportCodeIata> foundPage = new PageImpl<>( expected) ;
 
-        given( repository.findAll(any(Pageable.class)))
+        given( repository.findAll( any( Pageable.class ) ) )
             .willReturn( foundPage );
 
         final MockHttpServletResponse response = mvc.perform(
             get("/location/airport/iata" ))
             .andDo(MockMvcResultHandlers.print())
-            .andExpect(status().isOk() )
-            .andExpect(jsonPath("$.content").isArray())
-            .andExpect(jsonPath("$.content", hasSize(0)))  // hamcrest
+            .andExpect( status().isOk() )
+            .andExpect( jsonPath( "$.content" ).isArray() )
+            .andExpect( jsonPath( "$.content", hasSize( 0 ) ) )  // hamcrest
             .andReturn().getResponse();
 
-        verify( repository, times(1)).findAll(any(Pageable.class));   // Mockito
+        verify( repository, times( 1 ) ).findAll( any( Pageable.class ) );   // Mockito
     }
 
 
@@ -218,21 +237,21 @@ public class LocationControllerIataTest {
         List<AirportCodeIata> listOfIataAirportCodes =
             Arrays.asList( codeStringList )
                   .stream()
-                  .map( a -> new AirportCodeIata( a ))
-                  .collect(Collectors.toList());
-        Page<AirportCodeIata> foundPage = new PageImpl<>(listOfIataAirportCodes);
-          
-        given( repository.findAll(any(Pageable.class)))
+                  .map( a -> new AirportCodeIata( a ) )
+                  .collect( Collectors.toList() );
+        Page<AirportCodeIata> foundPage = new PageImpl<>( listOfIataAirportCodes );
+
+        given( repository.findAll( any( Pageable.class ) ) )
             .willReturn( foundPage );
 
-        final MockHttpServletResponse response = mvc.perform(
-            get("/location/airport/iata" ))
-            // .andDo(MockMvcResultHandlers.print())
-            .andExpect(status().isOk() )
-            .andExpect(jsonPath("$.content").isArray())
-            .andExpect(jsonPath("$.content", hasSize(1)))  // hamcrest
-            .andExpect(jsonPath("$.content[0].iataAirportCode", equalTo("NRT")))  // hamcrest
-            .andReturn().getResponse();
+        final MockHttpServletResponse response =
+            mvc.perform( get( "/location/airport/iata" ) )
+                // .andDo(MockMvcResultHandlers.print())
+                .andExpect( status().isOk() )
+                .andExpect( jsonPath( "$.content" ).isArray() )
+                .andExpect( jsonPath( "$.content", hasSize( 1 ) ) )  // hamcrest
+                .andExpect( jsonPath( "$.content[0].iataAirportCode", equalTo( "NRT" ) ) )  // hamcrest
+                .andReturn().getResponse();
     }
 
 
@@ -249,7 +268,7 @@ public class LocationControllerIataTest {
                   .map( a -> new AirportCodeIata( a ))
                   .collect(Collectors.toList());
         Page<AirportCodeIata> foundPage = new PageImpl<>(listOfIataAirportCodes);
-        
+
         log.error( "list: {}", () -> listOfIataAirportCodes  );
         log.error( "page before {}", () -> foundPage );
         log.error( "page before {}", () -> foundPage.toList() );
@@ -260,20 +279,19 @@ public class LocationControllerIataTest {
         final MockHttpServletResponse response = mvc.perform(
             get("/location/airport/iata" ))
             // .andDo(MockMvcResultHandlers.print())
-            .andExpect(status().isOk() )
             // .andExpect( content(). )
             // .andExpect(content().json("[{iataAirportCode: \"NRT\"}]"))
             // .andExpect( jsonPath("$.iataAirportCode", equalTo( "ATL")))
-            .andExpect(status().isOk() )
-            .andExpect(jsonPath("$.content").isArray())
-            .andExpect(jsonPath("$.content", hasSize(5)))  // hamcrest
+            .andExpect( status().isOk() )
+            .andExpect( jsonPath("$.content" ).isArray() )
+            .andExpect( jsonPath("$.content", hasSize( 5 ) ) )  // hamcrest
             // .andExpect(jsonPath("$.content", hasItem("{\"iataAirportCode\":\"NRT\"}")))  // hamcrest
             // .andExpect(jsonPath("$.content", hasItem("LAX")))  // hamcrest
             // .andExpect(jsonPath("$.content", hasItem("ORD")))  // hamcrest
             // .andExpect(jsonPath("$.content", hasItem("MSP")))  // hamcrest
             // .andExpect(jsonPath("$.content", hasItem("ATL")))  // hamcrest
             // .andExpect(jsonPath("$.content", hasItem("YYZ")))  // hamcrest
-            .andExpect(jsonPath("$.content[*].iataAirportCode", containsInAnyOrder("NRT", "ATL", "MSP", "ORD", "LAX")))  // hamcrest
+            .andExpect( jsonPath( "$.content[*].iataAirportCode", containsInAnyOrder( "NRT", "ATL", "MSP", "ORD", "LAX" ) ) )  // hamcrest
             .andReturn().getResponse();
 
         log.error( "response: '" + response.getContentAsString() + "'");
@@ -423,6 +441,5 @@ public class LocationControllerIataTest {
 
 }
 
- 
- 
- 
+
+

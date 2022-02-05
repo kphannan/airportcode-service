@@ -1,4 +1,4 @@
-package com.airline.locationservice.persistence.model;
+package com.airline.locationservice.persistence.model.airport;
 
 import java.math.BigDecimal;
 // import java.util.Date;
@@ -49,7 +49,7 @@ public class Airport extends Auditable<String>
 
     /**
      * The text identifier used in the OurAirports URL.
-     * This will be the ICAO code if available. Otherwise, it will be a 
+     * This will be the ICAO code if available. Otherwise, it will be a
      * local airport code (if no conflict), or if nothing else is available,
      * an internally-generated code starting with the ISO2 country code,
      * followed by a dash and a four-digit number.
@@ -179,13 +179,13 @@ public class Airport extends Auditable<String>
     // ----- Auditable -----
     // @CreatedBy
     // User creator;
-     
+
     // @CreatedDate
     // Date createdAt;
-     
+
     // @LastModifiedDate
     // Date modifiedAt;
-    
+
     // @LastModifiedBy
     // User modifier;
 }

@@ -1,44 +1,58 @@
-package com.airline.locationservice.controller;
+package com.airline.locationservice.controller.airport;
 
-import java.util.List;
+
+import com.airline.locationservice.persistence.model.airport.Airport;
+import com.airline.locationservice.persistence.repository.airport.AirportRepository;
 import java.util.Optional;
-import java.util.Collections;
-// import java.util.stream.Collectors;
-
-import com.airline.locationservice.persistence.model.Airport;
-import com.airline.locationservice.persistence.repository.AirportRepository;
-// import com.airline.core.location.AirportCode;
-// import com.airline.core.location.ICAOAirportCode;
-// import com.airline.core.location.AirportCodeFactory;
-
-// import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-// import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
+
+// import java.util.List;
+// import java.util.Collections;
+// import java.util.stream.Collectors;
+// import org.springframework.data.domain.PageRequest;
+// import org.springframework.data.domain.Sort;
+// import org.springframework.http.HttpStatus;
+// import org.springframework.web.bind.annotation.DeleteMapping;
+// import org.springframework.web.bind.annotation.PostMapping;
+// import org.springframework.web.bind.annotation.PutMapping;
+// import org.springframework.web.bind.annotation.RequestBody;
+// import org.springframework.web.bind.annotation.RequestParam;
+// import org.springframework.web.bind.annotation.ResponseStatus;
+
 
 @RestController
-// @RequestMapping("/location/airport")
 @RequestMapping( "/location/airport" )
 public class AirportController
 {
     private final AirportRepository repository;
 
-    AirportController(AirportRepository repository)
+    AirportController( AirportRepository repository )
     {
         this.repository = repository;
     }
+
+
+    // ----- Create -----
+
+    // @PostMapping("")
+    // @ResponseStatus( HttpStatus.CREATED )
+    // // ResponseEntity<Airport> newAirportCode(@RequestBody Airport newAirport) {
+    // Airport newAirportCode(@RequestBody Airport newAirport) {
+    //     Airport airport = repository.save(newAirport);
+
+    //     // Return 201 (Created)
+    //     // return new ResponseEntity.created(airport).build();
+    //     return airport;
+    // }
+
+
+    // ----- Retrieve -----
 
     // @GetMapping(path="", params = { "page", "size" })
     @GetMapping( path = "" )
@@ -55,31 +69,25 @@ public class AirportController
         //         .collect(Collectors.toList());
 
         // return ResponseEntity.ok(airports);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok( result );
     }
 
 
     @GetMapping( "/{id}" )
-    public ResponseEntity<Optional<Airport>> one( @PathVariable Long id ) {
-        Optional<Airport> airport = repository.findById(id);
-        if (airport.isPresent())
-            return ResponseEntity.ok(airport);
+    public ResponseEntity<Optional<Airport>> one( @PathVariable Long id )
+    {
+        Optional<Airport> airport = repository.findById( id );
+        if ( airport.isPresent() )
+        {
+            return ResponseEntity.ok( airport );
+        }
         else
+        {
             return ResponseEntity.notFound().build();
+        }
     }
 
-
-    // @PostMapping("")
-    // @ResponseStatus( HttpStatus.CREATED )
-    // // ResponseEntity<Airport> newAirportCode(@RequestBody Airport newAirport) {
-    // Airport newAirportCode(@RequestBody Airport newAirport) {
-    //     Airport airport = repository.save(newAirport);
-
-    //     // Return 201 (Created)
-    //     // return new ResponseEntity.created(airport).build();
-    //     return airport;
-    // }
-
+    // ----- Update -----
 
     // @PutMapping("/{id}")
     // public ResponseEntity<AirportCode> replaceAirportCode( @RequestBody ICAOAirportCode newAirportCode,
@@ -95,6 +103,9 @@ public class AirportController
     //                     repository.save( new Airport( newAirportCode.getAirportCode() ) ).getIcaoCode() ),
     //             HttpStatus.CREATED);
     // }
+
+
+    // ----- Delete -----
 
     // @DeleteMapping("/{id}")
     // public ResponseEntity<Boolean> deleteAirportCode( @PathVariable String id ) {

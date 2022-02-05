@@ -1,7 +1,9 @@
-package com.airline.locationservice.persistence.repository;
+package com.airline.locationservice.persistence.repository.airport;
 
-import com.airline.locationservice.persistence.model.AirportCodeIcao;
 import java.util.Optional;
+
+import com.airline.locationservice.persistence.model.airport.AirportCodeIcao;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.Query;

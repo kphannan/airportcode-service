@@ -1,4 +1,4 @@
-package com.airline.locationservice.controller;
+package com.airline.locationservice.controller.location;
 
 import static org.hamcrest.Matchers.*;
 
@@ -14,13 +14,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.airline.locationservice.persistence.model.Country;
+import com.airline.locationservice.controller.location.CountryController;
+import com.airline.locationservice.persistence.model.location.Country;
 
+import org.junit.jupiter.api.BeforeEach;
 // import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +34,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -39,37 +43,40 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.mockito.InjectMocks;
-
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.airline.locationservice.persistence.repository.CountryRepository;
+import com.airline.locationservice.persistence.repository.location.CountryRepository;
 
 
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
-@WebAppConfiguration
-@AutoConfigureMockMvc
+// @SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
+// @WebAppConfiguration
+// @AutoConfigureMockMvc
 @Log4j2
 public class CountryControllerTest
 {
     @Autowired
     private MockMvc      mvc;
 
-    @MockBean
+    @Mock
     CountryRepository    repository;    // mock repository
 
     @InjectMocks
     CountryController    service;       // service under test
 
-    // @BeforeEach
-    // public void setup()
-    // {
-    //     mvc = MockMvcBuilders.standaloneSetup(service)
-    //             .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
-    //             // .setControllerAdvice(new SuperHeroExceptionHandler())
-    //             // .addFilters(new SuperHeroFilter())
-    //             .build();
-    // }
+
+
+   // ----- Before -----
+   @BeforeEach
+   public void setup()
+   {
+       mvc = MockMvcBuilders.standaloneSetup( service )
+               .setCustomArgumentResolvers( new PageableHandlerMethodArgumentResolver() )
+               // .setControllerAdvice(new SuperHeroExceptionHandler())
+               // .addFilters(new SuperHeroFilter())
+               .build();
+   }
 
 
 
@@ -244,6 +251,5 @@ public class CountryControllerTest
 
 }
 
- 
- 
- 
+
+

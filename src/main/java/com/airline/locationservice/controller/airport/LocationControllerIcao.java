@@ -1,10 +1,11 @@
-package com.airline.locationservice.controller;
+package com.airline.locationservice.controller.airport;
 
 import com.airline.core.location.AirportCode;
 import com.airline.core.location.ICAOAirportCode;
 import com.airline.core.location.AirportCodeFactory;
-import com.airline.locationservice.persistence.model.AirportCodeIcao;
-import com.airline.locationservice.persistence.repository.AirportCodeIcaoRepository;
+import com.airline.locationservice.persistence.model.airport.AirportCodeIcao;
+import com.airline.locationservice.persistence.repository.airport.AirportCodeIcaoRepository;
+
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;

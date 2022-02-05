@@ -1,4 +1,4 @@
-package com.airline.locationservice.controller;
+package com.airline.locationservice.controller.location;
 
 import static org.hamcrest.Matchers.*;
 
@@ -11,16 +11,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.airline.locationservice.controller.location.RegionController;
 // import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import com.airline.locationservice.persistence.model.Region;
-import com.airline.locationservice.persistence.repository.RegionsRepository;
+import com.airline.locationservice.persistence.model.location.Region;
+import com.airline.locationservice.persistence.repository.location.RegionsRepository;
 import java.util.ArrayList;
 // import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -33,22 +37,39 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.http.MediaType;
 
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
 
 
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
-@WebAppConfiguration
-@AutoConfigureMockMvc
+// @SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
+// @WebAppConfiguration
+// @AutoConfigureMockMvc
 public class RegionControllerTest
 {
     @Autowired
     private MockMvc   mvc;              // web / REST support
 
-    @MockBean
+    @Mock
     RegionsRepository repository;       // mock repository
 
     @InjectMocks
     RegionController    service;        // Service under test
+
+
+
+    // ----- Before -----
+    @BeforeEach
+    public void setup()
+    {
+        mvc = MockMvcBuilders.standaloneSetup( service )
+                .setCustomArgumentResolvers( new PageableHandlerMethodArgumentResolver() )
+                // .setControllerAdvice(new SuperHeroExceptionHandler())
+                // .addFilters(new SuperHeroFilter())
+                .build();
+    }
+
 
 
     // -----  -----
@@ -57,13 +78,13 @@ public class RegionControllerTest
         throws Exception
     {
         Region region = new Region();
-        region.setContinent("NA");
-        region.setCountry("FooLand");
-        region.setName("Foo");
+        region.setContinent( "NA" );
+        region.setCountry( "FooLand" );
+        region.setName( "Foo" );
         region.setId( 306086 );
 
-        given( repository.findById(306086))
-            .willReturn( Optional.of( region ));
+        given( repository.findById( 306086 ) )
+            .willReturn( Optional.of( region ) );
 
         mvc.perform( get("/location/region/{id}", 306086 )
                         .accept( MediaType.APPLICATION_JSON ))
@@ -139,19 +160,18 @@ public class RegionControllerTest
         given( repository.findByContinent( anyString(), any(Pageable.class)))
             .willReturn( foundPage );
 
-        mvc.perform( get("/location/region/byContinent/{continent}", "NA" ))
+        mvc.perform( get( "/location/region/byContinent/{continent}", "NA" ) )
             // .andDo(MockMvcResultHandlers.print())
-            .andExpect(status().isOk() )
-
-            .andExpect( jsonPath("$.content").isArray())
-            .andExpect( jsonPath("$.content", hasSize(1)))  // hamcrest
-            .andExpect( jsonPath("$.content[0].id", equalTo( 306086 )))
-            .andExpect( jsonPath("$.content[0].country", equalTo( "FooLand" )))
-            .andExpect( jsonPath("$.content[0].name", equalTo( "Foo" )));
+            .andExpect( status().isOk() )
+            .andExpect( jsonPath( "$.content" ).isArray() )
+            .andExpect( jsonPath( "$.content", hasSize( 1 ) ) )  // hamcrest
+            .andExpect( jsonPath( "$.content[0].id", equalTo( 306086 ) ) )
+            .andExpect( jsonPath( "$.content[0].country", equalTo( "FooLand" ) ) )
+            .andExpect( jsonPath( "$.content[0].name", equalTo( "Foo" ) ) );
 
         then(repository)
             .should()
-            .findByContinent(anyString(), any(Pageable.class));
+            .findByContinent( anyString(), any( Pageable.class ) );
     }
 
 
@@ -163,29 +183,29 @@ public class RegionControllerTest
         throws Exception
     {
         Region region = new Region();
-        region.setContinent("NA");
-        region.setCountry("FooLand");
-        region.setName("Foo");
+        region.setContinent( "NA" );
+        region.setCountry( "FooLand" );
+        region.setName( "Foo" );
         region.setId( 306086 );
         List<Region> regionList = new ArrayList<>();
         regionList.add( region );
-        Page<Region> foundPage = new PageImpl<>(regionList);
+        Page<Region> foundPage = new PageImpl<>( regionList );
 
-        given( repository.findByCountry( anyString(), any(Pageable.class)))
+        given( repository.findByCountry( anyString(), any( Pageable.class ) ) )
             .willReturn( foundPage );
 
-        mvc.perform( get("/location/region/byCountry/{country}", "CAN" ))
+        mvc.perform( get( "/location/region/byCountry/{country}", "CAN" ) )
             // .andDo(MockMvcResultHandlers.print())
-            .andExpect(status().isOk() )
-            .andExpect( jsonPath("$.content").isArray())
-            .andExpect( jsonPath("$.content", hasSize(1)))  // hamcrest
-            .andExpect( jsonPath("$.content[0].id", equalTo( 306086 )))
-            .andExpect( jsonPath("$.content[0].country", equalTo( "FooLand" )))
-            .andExpect( jsonPath("$.content[0].name", equalTo( "Foo" )));
+            .andExpect( status().isOk() )
+            .andExpect( jsonPath( "$.content" ).isArray() )
+            .andExpect( jsonPath( "$.content", hasSize( 1 ) ) )  // hamcrest
+            .andExpect( jsonPath( "$.content[0].id", equalTo( 306086 ) ) )
+            .andExpect( jsonPath( "$.content[0].country", equalTo( "FooLand" ) ) )
+            .andExpect( jsonPath( "$.content[0].name", equalTo( "Foo" ) ) );
 
-        then(repository)
+        then( repository )
             .should()
-            .findByCountry(anyString(), any(Pageable.class));
+            .findByCountry( anyString(), any( Pageable.class ) );
     }
 
 }

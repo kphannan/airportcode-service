@@ -1,4 +1,4 @@
-package com.airline.locationservice.persistence.model;
+package com.airline.locationservice.persistence.model.location;
 
 import java.net.URI;
 
@@ -9,11 +9,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.airline.locationservice.persistence.model.UriConverter;
+
 import lombok.Data;
 
 /**
  * Each row represents a high-level administrative subdivision of a country.
- * The iso_region column in airports.csv links to the code column in 
+ * The iso_region column in airports.csv links to the code column in
  * this dataset.
  */
 @Entity
@@ -32,7 +34,7 @@ public class Region
     private Integer id;
 
     /**
-     * local_code prefixed with the country code to make 
+     * local_code prefixed with the country code to make
      * a globally-unique identifier.
      */
     @Column( name = "code" )
@@ -41,9 +43,9 @@ public class Region
 
     /**
      * The local code for the administrative subdivision. Whenever possible,
-     * these are official ISO 3166:2, at the highest level available, but in 
+     * these are official ISO 3166:2, at the highest level available, but in
      * some cases OurAirports has to use unofficial codes. There is also a
-     * pseudo code "U-A" for each country, which means that the airport has 
+     * pseudo code "U-A" for each country, which means that the airport has
      * not yet been assigned to a region (or perhaps can't be, as in the case
      * of a deep-sea oil platform).
      */
@@ -53,7 +55,7 @@ public class Region
 
     /**
      * The common English-language name for the administrative subdivision.
-     * In some cases, the name in local languages will appear in the keywords 
+     * In some cases, the name in local languages will appear in the keywords
      * field assist search.
      */
     @Column( name = "name" )
@@ -70,7 +72,7 @@ public class Region
     private String country; // ! Create domain object for the country code
 
     /**
-     * A code for the continent to which the region belongs. See the continent 
+     * A code for the continent to which the region belongs. See the continent
      * field in airports.csv for a list of codes.
      */
     @Column( name = "continent" )
@@ -86,7 +88,7 @@ public class Region
 
     /**
      * A comma-separated list of keywords to assist with search.
-     * May include former names for the region, and/or the region name 
+     * May include former names for the region, and/or the region name
      * in other languages.
      */
     @Column( name = "keywords" )

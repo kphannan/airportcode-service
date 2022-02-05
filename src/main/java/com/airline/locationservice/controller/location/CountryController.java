@@ -1,10 +1,10 @@
-package com.airline.locationservice.controller;
+package com.airline.locationservice.controller.location;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.airline.locationservice.persistence.model.Country;
-import com.airline.locationservice.persistence.repository.CountryRepository;
+import com.airline.locationservice.persistence.model.location.Country;
+import com.airline.locationservice.persistence.repository.location.CountryRepository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,17 +27,21 @@ public class CountryController
     }
 
 
+
+    // ----- Create -----
+    // ----- Retrieve -----
+
     @GetMapping( "" )
     public Page<Country> all( Pageable pageable )
     {
         // Get list of airport codes from the DB, potentially an empty list.
-        Page<Country> result = repository.findAll(pageable);
+        Page<Country> result = repository.findAll( pageable );
 
         return result;
     }
 
 
-    // // Single item
+    // Single item
 
     @GetMapping( "/{id}" )
     public ResponseEntity<Country> findCountryById(@PathVariable Integer id )
@@ -68,5 +72,12 @@ public class CountryController
 
         return ResponseEntity.ok( region );
     }
+
+
+    // ----- Update -----
+    // ----- Delete -----
+
+
+
 
 }

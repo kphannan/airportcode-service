@@ -1,4 +1,4 @@
-package com.airline.locationservice.controller;
+package com.airline.locationservice.controller.airport;
 
 
 import static org.hamcrest.Matchers.*;
@@ -10,9 +10,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-
-import com.airline.locationservice.persistence.model.AirportCodeIcao;
-import com.airline.locationservice.persistence.repository.AirportCodeIcaoRepository;
+import com.airline.locationservice.controller.airport.LocationControllerIcao;
+import com.airline.locationservice.persistence.model.airport.AirportCodeIcao;
+import com.airline.locationservice.persistence.repository.airport.AirportCodeIcaoRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +23,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 // import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.data.domain.PageImpl;
 // import org.springframework.data.web.JsonPath;
 import org.springframework.http.MediaType;
@@ -44,31 +46,45 @@ import org.springframework.web.context.WebApplicationContext;
 
 
 @ExtendWith( MockitoExtension.class )
-@SpringBootTest( properties = "spring.main.allow-bean-definition-overriding=true" )
-@WebAppConfiguration
-@AutoConfigureMockMvc
+// @SpringBootTest( properties = "spring.main.allow-bean-definition-overriding=true" )
+// @WebAppConfiguration
+// @AutoConfigureMockMvc
 // @Log4j2
 class LocationControllerIcaoTest
 {
-    @Autowired
-    private WebApplicationContext webApplicationContext;
+    // @Autowired
+    // private WebApplicationContext webApplicationContext;
 
     private MockMvc   mvc;
 
     // mock repository
-    @MockBean
+    @Mock
     AirportCodeIcaoRepository repository;
 
     @InjectMocks
     LocationControllerIcao    service;
 
+    // @BeforeEach
+    // void setup()
+    // {
+    //     mvc = MockMvcBuilders.webAppContextSetup( webApplicationContext )
+    //         // .setControllerAdvice(new SuperHeroExceptionHandler())
+    //         // .addFilters(new SuperHeroFilter())
+    //         .build();
+    // }
+    // ----- Before -----
     @BeforeEach
-    void setup()
+    public void setup()
     {
-        mvc = MockMvcBuilders.webAppContextSetup( webApplicationContext )
-            // .setControllerAdvice(new SuperHeroExceptionHandler())
-            // .addFilters(new SuperHeroFilter())
-            .build();
+        // mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+        //         // .setControllerAdvice(new SuperHeroExceptionHandler())
+        //         // .addFilters(new SuperHeroFilter())
+        //         .build();
+        mvc = MockMvcBuilders.standaloneSetup( service )
+                .setCustomArgumentResolvers( new PageableHandlerMethodArgumentResolver() )
+                // .setControllerAdvice(new SuperHeroExceptionHandler())
+                // .addFilters(new SuperHeroFilter())
+                .build();
     }
 
 
@@ -112,7 +128,7 @@ class LocationControllerIcaoTest
         List<AirportCodeIcao> expected = new ArrayList<>();
         Page<AirportCodeIcao> foundPage = new PageImpl<>( expected );
 
-        given( repository.findAll(any( Pageable.class ) ) )
+        given( repository.findAll( any( Pageable.class ) ) )
             .willReturn( foundPage );
 
         final MockHttpServletResponse response = mvc.perform(
