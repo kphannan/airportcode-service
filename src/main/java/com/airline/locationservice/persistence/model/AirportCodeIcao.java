@@ -9,20 +9,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table( name = "AIRPORTS" )
+@Table( name = "icao_airportcode" )
 @Data
 @NoArgsConstructor
 public class AirportCodeIcao
 {
     @Id
-    @Column( name = "IDENT" )
+    @Column( name = "icao_code" )
     private String icaoCode;
 
-    // protected AirportCodeIcao() {}
-
-    public AirportCodeIcao( String code )
+    public AirportCodeIcao( final String icaoCode )
     {
-        icaoCode = code;
+        this.icaoCode = icaoCode;
     }
 }
 

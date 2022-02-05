@@ -28,8 +28,9 @@ import org.springframework.http.HttpStatus;
 // import com.airline.core.location.IATAAirportCode;
 
 @RestController
-@RequestMapping("/location/region")
-public class RegionController {
+@RequestMapping( "/location/region" )
+public class RegionController
+{
     private final RegionsRepository repository;
 
     RegionController( RegionsRepository repository )
@@ -40,11 +41,11 @@ public class RegionController {
 
     // @PageableDefault(size = 10, direction = Sort.Direction.DESC, sort = "someField")
 
-    @GetMapping("")
-    Page<Region> all(@PageableDefault(page = 0, size = 20) Pageable pageable)
+    @GetMapping( "" )
+    public Page<Region> all( @PageableDefault( page = 0, size = 20 ) Pageable pageable )
     {
         // Get list of airport codes from the DB, potentially an empty list.
-        Page<Region> result = repository.findAll(pageable);
+        Page<Region> result = repository.findAll( pageable );
 
         return result;
     }
@@ -72,13 +73,13 @@ public class RegionController {
 
     // // Single item
 
-    @GetMapping("/{id}")
-    ResponseEntity<Region> one(@PathVariable Integer id )
+    @GetMapping( "/{id}" )
+    public ResponseEntity<Region> one( @PathVariable Integer id )
     {
-        Optional<Region> region = repository.findById(id);
+        Optional<Region> region = repository.findById( id );
                                         //  .orElseThrow(() -> new AirportCodeNotFoundException( "999" ));
         if ( region.isPresent() )
-            return ResponseEntity.ok(region.get());
+            return ResponseEntity.ok( region.get() );
         else
             return ResponseEntity.notFound().build();
         // return new ResponseEntity<>( new IATAAirportCode( iata.getIataCode() ),
@@ -88,15 +89,15 @@ public class RegionController {
 
 
     @GetMapping("/byContinent/{continent}")
-    ResponseEntity<Page<Region>> regionByContinent(@PathVariable String continent, Pageable paging )
+    public ResponseEntity<Page<Region>> regionByContinent( @PathVariable String continent, Pageable paging )
     {
-        Page<Region> region = repository.findByContinent( continent, paging);
+        Page<Region> region = repository.findByContinent( continent, paging );
 
-        return ResponseEntity.ok(region);
+        return ResponseEntity.ok( region );
     }
 
     @GetMapping("/byCountry/{country}")
-    ResponseEntity<Page<Region>> regionByCountry(@PathVariable String country, Pageable paging )
+    public ResponseEntity<Page<Region>> regionByCountry( @PathVariable String country, Pageable paging )
     {
         Page<Region> region = repository.findByCountry( country, paging);
 

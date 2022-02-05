@@ -25,6 +25,6 @@ public interface AirportCodeIataRepository extends PagingAndSortingRepository<Ai
 
     @Query( "FROM #{#entityName} a WHERE a.iataCode IS NOT NULL AND a.iataCode != '' AND a.iataCode != '0' AND a.iataCode NOT LIKE '%-'  AND a.iataCode NOT LIKE '%2'  AND a.iataCode NOT LIKE '%4'  AND a.iataCode NOT LIKE '%7'")
     // @Query( "FROM #{#entityName} a WHERE a.iataCode #{MATCHES '[A-Z]{3}'}")
-    Page<AirportCodeIata> findAll(Pageable paging);
+    Page<AirportCodeIata> findAll( Pageable paging );
 }
 

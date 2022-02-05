@@ -2,35 +2,36 @@
 Feature: IATA Airport code lookup
 
     Background:
-        # * url 'http://localhost:8100/airport'
-        * url baseUrl
+        * url baseUrl + '/airport/iata'
         * configure report = { showLog: true, showAllSteps: false, logPrettyRequest: true, logPrettyResponse: true }
 
 
     Scenario: Retrieve a list of IATA airport codes
-        Given path '/iata'
+        Given path ''
         When method GET
         Then status 200
         # And $ #array
-        And match $ contains { iataAirportCode: 'ATL' }
+        And match $.content contains {"iataAirportCode":"MSP"}
 
 
     # ----- (GET) Lookup existing airport -----
-    Scenario Outline: Spot check a few IATA airport codes
-        Given path '/iata/<id>'
-        When method GET
-        Then status 200
-        And match $.iataAirportCode == "<id>"
+    Scenario Outline: Spot check IATA airport "<id>" code exists
+        Given path '/<id>'
+         When method GET
+         Then status 200
+          And match $.iataAirportCode == "<id>"
+
         Examples:
         | id  |
         | ATL |
         | MSP |
 
     # ----- (GET) lookup non-existent codes -----
-    Scenario Outline: Ensure unknown IATA airport codes are not found
-        Given path '/iata/<id>'
-        When method GET
-        Then status 404
+    Scenario Outline: Ensure unknown IATA airport code "<id>" is not found
+        Given path '/<id>'
+         When method GET
+         Then status 404
+
         Examples:
         | id  |
         | SOS |
@@ -38,21 +39,21 @@ Feature: IATA Airport code lookup
 
 
     # ----- Add airport code (POST) -----
-    # Scenario Outline: Add a new IATA airport code
-    #     Given path '/iata'
-    #     And request {iataAirportCode: "<id>" }
-    #     When method POST
-    #     Then status 201
+    Scenario Outline: Add a new IATA airport code
+        Given path ''
+          And request {iataAirportCode: "<id>" }
+         When method POST
+         Then status 201
 
     #     # When method GET
     #     # Then status 200
     #     # And match $.iata_code == <id>
     #     # And match $ == {"iataAirportCode":"<id>"}
     #     And match $.iataAirportCode == "<id>"
-    #     Examples:
-    #     | id  |
-    #     | YYZ |
-    #     | LAX |
+        Examples:
+        | id  |
+        | YYZ |
+        | LAX |
 
 
 

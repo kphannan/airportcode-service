@@ -22,7 +22,7 @@ spring:
 
   cloud:
     configs:
-      uri: http://localhost:8080
+      uri: http://localhost:8088
       enabled: false
 
   output:
@@ -33,7 +33,7 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-      
+
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
 
@@ -55,7 +55,7 @@ spring:
         default-page-size: 25
         one-indexed-parameters: false
         max-page-size: 2000
-        prefix: 
+        prefix:
         qualifier-delimiter: _
 
 ##### Rendezvous service (Eureka) #####

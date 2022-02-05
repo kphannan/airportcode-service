@@ -30,18 +30,19 @@ import org.springframework.http.HttpStatus;
 
 @RestController
 // @RequestMapping("/location/airport")
-@RequestMapping("/location/airport")
-public class AirportController {
-
+@RequestMapping( "/location/airport" )
+public class AirportController
+{
     private final AirportRepository repository;
 
-    AirportController(AirportRepository repository) {
-            this.repository = repository;
+    AirportController(AirportRepository repository)
+    {
+        this.repository = repository;
     }
 
     // @GetMapping(path="", params = { "page", "size" })
-    @GetMapping(path="")
-    ResponseEntity<Page<Airport>> all( Pageable paging )
+    @GetMapping( path = "" )
+    public ResponseEntity<Page<Airport>> all( Pageable paging )
     {
         Page<Airport> result = repository.findAll( paging );
 
@@ -58,8 +59,8 @@ public class AirportController {
     }
 
 
-    @GetMapping("/{id}")
-    ResponseEntity<Optional<Airport>> one(@PathVariable Long id) {
+    @GetMapping( "/{id}" )
+    public ResponseEntity<Optional<Airport>> one( @PathVariable Long id ) {
         Optional<Airport> airport = repository.findById(id);
         if (airport.isPresent())
             return ResponseEntity.ok(airport);
@@ -78,32 +79,32 @@ public class AirportController {
     //     // return new ResponseEntity.created(airport).build();
     //     return airport;
     // }
-    
-    
+
+
     // @PutMapping("/{id}")
-    // ResponseEntity<AirportCode> replaceAirportCode(@RequestBody ICAOAirportCode newAirportCode,
-    //         @PathVariable String id) {
+    // public ResponseEntity<AirportCode> replaceAirportCode( @RequestBody ICAOAirportCode newAirportCode,
+    //         @PathVariable String id ) {
     //     Optional<Airport> icao = repository.findById(id);
-    //     if (icao.isPresent()) {
-    //         return new ResponseEntity<>(new ICAOAirportCode(icao.get().getIcaoCode()), HttpStatus.OK);
+    //     if ( icao.isPresent() ) {
+    //         return new ResponseEntity<>(new ICAOAirportCode( icao.get().getIcaoCode()), HttpStatus.OK );
     //     }
 
     //     // Map the response to a Domain Object
     //     return new ResponseEntity<>(
     //             new ICAOAirportCode(
-    //                     repository.save(new Airport(newAirportCode.getAirportCode())).getIcaoCode()),
+    //                     repository.save( new Airport( newAirportCode.getAirportCode() ) ).getIcaoCode() ),
     //             HttpStatus.CREATED);
     // }
 
     // @DeleteMapping("/{id}")
-    // ResponseEntity<Boolean> deleteAirportCode(@PathVariable String id) {
-    //     Optional<AirportCodeIcao> icao = repository.findById(id);
-    //     if (icao.isPresent()) {
+    // public ResponseEntity<Boolean> deleteAirportCode( @PathVariable String id ) {
+    //     Optional<AirportCodeIcao> icao = repository.findById( id );
+    //     if ( icao.isPresent() ) {
     //         // HTTP 204 (No Content)
     //         repository.deleteById(id);
-    //         return new ResponseEntity<>(Boolean.TRUE, HttpStatus.NO_CONTENT);
+    //         return new ResponseEntity<>( Boolean.TRUE, HttpStatus.NO_CONTENT );
     //     } else {
-    //         return new ResponseEntity<>(Boolean.FALSE, HttpStatus.NOT_FOUND);
+    //         return new ResponseEntity<>( Boolean.FALSE, HttpStatus.NOT_FOUND );
     //     }
     // }
 

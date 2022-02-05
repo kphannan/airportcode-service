@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 
 
 @RestController
-@RequestMapping("/location/country")
+@RequestMapping( "/location/country" )
 public class CountryController
 {
     private final CountryRepository repository;
@@ -27,8 +27,8 @@ public class CountryController
     }
 
 
-    @GetMapping("")
-    Page<Country> all(Pageable pageable)
+    @GetMapping( "" )
+    public Page<Country> all( Pageable pageable )
     {
         // Get list of airport codes from the DB, potentially an empty list.
         Page<Country> result = repository.findAll(pageable);
@@ -39,8 +39,8 @@ public class CountryController
 
     // // Single item
 
-    @GetMapping("/{id}")
-    ResponseEntity<Country> findCountryById(@PathVariable Integer id )
+    @GetMapping( "/{id}" )
+    public ResponseEntity<Country> findCountryById(@PathVariable Integer id )
     {
         Optional<Country> region = repository.findById(id);
 
@@ -50,8 +50,8 @@ public class CountryController
             return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/code/{countryCode}")
-    ResponseEntity<Country> findCountryByCode(@PathVariable String countryCode )
+    @GetMapping( "/code/{countryCode}" )
+    public ResponseEntity<Country> findCountryByCode( @PathVariable String countryCode )
     {
         Optional<Country> region = repository.findByCode(countryCode);
 
@@ -61,8 +61,8 @@ public class CountryController
             return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/continent/{continentCode}")
-    ResponseEntity<List<Country>> findCountriesByContinent(@PathVariable String continentCode )
+    @GetMapping( "/continent/{continentCode}" )
+    public ResponseEntity<List<Country>> findCountriesByContinent( @PathVariable String continentCode )
     {
         List<Country> region = repository.findByContinent(continentCode);
 

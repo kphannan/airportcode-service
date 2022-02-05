@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import lombok.Data;
 // import lombok.Value;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 import lombok.AccessLevel;
 
 /**
@@ -21,6 +22,7 @@ import lombok.AccessLevel;
 @Component
 @RefreshScope
 @Data
+@Log4j2
 public class PartnerServices
 {
     private String                foo;
@@ -31,24 +33,31 @@ public class PartnerServices
 
 
     @PostConstruct
-    public void init()
+    private void init()
     {
         // Build out the transient elements....
-        soapServices.forEach(svc -> {
-            svc.uri = (svc.certificate == null ? "http://" : "https://") + svc.host + ":" + svc.port;
-        });
+        if ( null != soapServices )
+        {
+            soapServices.forEach(svc -> {
+                svc.uri = (svc.certificate == null ? "http://" : "https://") + svc.host + ":" + svc.port;
+            });
+        }
 
-        System.out.println( "----- Examine the parter service list -----");
-        // System.out.println(services);
-        // System.out.println( something );
-        // System.out.println( foo );
-        System.out.println("   -- Services --");
-        services.forEach(System.out::println);
+        log.info( "----- Examine the parter service list -----" );
 
-        System.out.println("   -- SOAP Services --");
-        soapServices.forEach(System.out::println);
+        if ( null != services )
+        {
+            log.info( "   -- Services --" );
+            services.forEach( log::info );
+        }
 
-        System.out.println("----- End of service configuration -----");
+        if ( null != soapServices )
+        {
+            log.info( "   -- SOAP Services --" );
+            soapServices.forEach( log::info );
+        }
+
+        log.info( "----- End of service configuration -----" );
     }
 
 
@@ -110,7 +119,6 @@ public class PartnerServices
         private int      timeout;           //< timeout in ms; zero (0) results in no timeout
         private int      maxElapsedTime;    //< maximum elapsed time from first attempt in ms.
         private boolean  useAsyncStrategy;  //< if true, calls are async otherwise synchronous
-
     }
 }
 

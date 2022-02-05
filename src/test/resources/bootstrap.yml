@@ -1,5 +1,5 @@
 server:
-  port: ${port:8100}
+  port: ${port:8102}
 
 datasource:
   username: sa
@@ -22,7 +22,7 @@ spring:
     allow-bean-definition-overriding: true
 
   cloud:
-    configs:
+    config:
       uri: http://localhost:8080
       enabled: false
 
@@ -32,7 +32,7 @@ spring:
 
   jpa:
     show-sql: true
-      
+
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
 
@@ -54,7 +54,7 @@ spring:
         default-page-size: 25
         one-indexed-parameters: false
         max-page-size: 2000
-        prefix: 
+        prefix:
         qualifier-delimiter: _
 
 ##### Rendezvous service (Eureka) #####

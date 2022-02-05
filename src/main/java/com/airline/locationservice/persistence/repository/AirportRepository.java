@@ -14,9 +14,9 @@ import com.airline.locationservice.persistence.model.Airport;
 @Repository
 public interface AirportRepository extends PagingAndSortingRepository<Airport, Long>
 {
-    @Query("from #{#entityName} airportCode where airportCode.id = :id")
-    Optional<Airport> findById(@Param("id") Long id);
+    @Query( "from #{#entityName} airportCode where airportCode.id = :id" )
+    Optional<Airport> findById( @Param( "id" ) Long id) ;
 
-	Page<Airport> findAll(Pageable paging);
+	Page<Airport> findAll( Pageable paging );
 }
 

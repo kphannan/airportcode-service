@@ -11,6 +11,8 @@ import com.airline.locationservice.persistence.repository.AirportCodeIataReposit
 // import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 // import org.springframework.web.bind.annotation.PostMapping;
 // import org.springframework.web.bind.annotation.PutMapping;
 // import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +23,7 @@ import lombok.extern.log4j.Log4j2;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 // import org.springframework.data.domain.PageImpl;
 // import org.springframework.data.domain.PageRequest;
 // import org.springframework.data.domain.Sort;
@@ -38,7 +41,7 @@ import com.airline.core.location.IATAAirportCode;
 
 
 @RestController
-@RequestMapping("/location/airport/iata")
+@RequestMapping( "/location/airport/iata" )
 @Log4j2
 public class LocationControllerIata
 {
@@ -49,18 +52,28 @@ public class LocationControllerIata
         this.repository = repository;
     }
 
-
-    @GetMapping("")
-    ResponseEntity<Page<AirportCode>> all( Pageable paging )
+    // ----- Create -----
+    @PostMapping( "" )
+    public ResponseEntity<AirportCode> newAirportCode( @RequestBody IATAAirportCode newAirportCode )
     {
-        log.error("GET /location/airport/iata --- call repo");
-        log.error( "Paging: {}", paging );
-        log.error( "repos: {}", repository );
-        System.out.println("--GET /location/airport/iata --- call repo");
+        AirportCodeIata icaoDB = repository.save( new AirportCodeIata( newAirportCode.getAirportCode() ) );
+
+        // Return 201 (Created)
+        return ResponseEntity.status( HttpStatus.CREATED ).body( new IATAAirportCode( icaoDB.getIataCode() ) );
+    }
+
+    // ----- Retrieve -----
+    @GetMapping( "" )
+    public ResponseEntity<Page<AirportCode>> all( Pageable paging )
+    {
+        // log.error("GET /location/airport/iata --- call repo");
+        // log.error( "Paging: {}", paging );
+        // log.error( "repos: {}", repository );
+        // System.out.println("--GET /location/airport/iata --- call repo");
         // Get list of airport codes from the DB, potentially an empty list.
         Page<AirportCodeIata> result = repository.findAll( paging );
-        log.error( "result: {}", result.toList() );
-        System.out.println( "result: {" + result.toList() + "}" );
+        // log.error( "result: {}", result.toList() );
+        // System.out.println( "result: {" + result.toList() + "}" );
         // if ( result.isEmpty() )
         // {
         //     return ResponseEntity.ok(Collections.emptyList());
@@ -77,45 +90,36 @@ public class LocationControllerIata
         // return ResponseEntity.ok( airports );
         // return new PageImpl<AirportCode>( airports, paging, airports.size() );
         // Page<AirportCode> e = result.map(iata -> new IATAAirportCode(iata.getIataCode()) );
-        log.error("GET /location/airport/iata --- map result from repository");
-        return ResponseEntity.ok(result.map(iata -> new IATAAirportCode(iata.getIataCode()) ));
+        // log.error("GET /location/airport/iata --- map result from repository");
+        return ResponseEntity.ok( result.map( iata -> new IATAAirportCode( iata.getIataCode() ) ) );
 
         // return ResponseEntity.ok( result );
     }
 
-    // @PostMapping("")
-    // ResponseEntity<AirportCode> newAirportCode( @RequestBody IATAAirportCode newAirportCode )
-    // {
-    //     AirportCodeIata iataDB = repository.save( new AirportCodeIata( newAirportCode.getAirportCode() ));
-
-    //     // Return 201 (Created)
-    //     return ResponseEntity.status(HttpStatus.CREATED).body(new IATAAirportCode( iataDB.getIataCode() ));
-    // }
-
-
-
-
-
-
-
-
-    @GetMapping("/{id}")
-    ResponseEntity<AirportCode> one(@PathVariable String id )
+     @GetMapping( "/{id}" )
+    public ResponseEntity<AirportCode> one( @PathVariable String id )
     {
-        Optional<AirportCodeIata> iata = repository.findById(id);
-        log.error( "Response to one() {} {}", () -> id, () -> iata );
-        System.out.println( "Response to one(" + id +") " + iata );
+        Optional<AirportCodeIata> iata = repository.findById( id );
+        // log.error( "Response to one() {} {}", () -> id, () -> iata );
+        // System.out.println( "Response to one(" + id +") " + iata );
         if ( iata.isPresent() )
         {
-            log.error( "one() is present() {}", () -> iata.get() );
-            return ResponseEntity.ok( AirportCodeFactory.build( iata.get().getIataCode() ));
+            // log.error( "one() is present() {}", () -> iata.get() );
+            return ResponseEntity.ok( AirportCodeFactory.build( iata.get().getIataCode() ) );
         }
         else
         {
-            log.error( "one() not found" );
+            // log.error( "one() not found" );
             return ResponseEntity.notFound().build();
         }
     }
+
+
+
+    // ----- Update -----
+
+    // ----- Delete -----
+
 
     // @PutMapping("/{id}")
     // ResponseEntity<AirportCode> replaceAirportCode( @RequestBody IATAAirportCode newAirportCode, @PathVariable String id )
