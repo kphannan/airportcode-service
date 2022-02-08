@@ -1,8 +1,6 @@
 package com.airline.locationservice.persistence.model.airport;
 
 import java.math.BigDecimal;
-// import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -12,31 +10,27 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-// import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
-// import org.springframework.data.annotation.CreatedBy;
-// import org.springframework.data.annotation.CreatedDate;
-// import org.springframework.data.annotation.LastModifiedBy;
-// import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-// import com.airline.locationservice.persistence.audit.Auditable;
 
 
+/**
+ * Entity definition for the {@code Airport} table.
+ */
 @Entity
-// @Audited
 @Table( name = "AIRPORTS" )
 @Data
-@EqualsAndHashCode (callSuper = false)
+@EqualsAndHashCode( callSuper = false )
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners( AuditingEntityListener.class )
+@SuppressWarnings( "PMD.TooManyFields" )
 public class Airport //extends Auditable<String>
 {
     /**
@@ -45,6 +39,7 @@ public class Airport //extends Auditable<String>
      */
     @Id
     @GeneratedValue( strategy = GenerationType.AUTO )
+    @SuppressWarnings( "PMD.ShortVariable" )
     private Long id;
 
     /**
@@ -88,7 +83,9 @@ public class Airport //extends Auditable<String>
      * The airport elevation MSL in feet (not metres).
      */
     @Column( name = "ELEVATION_FT" )
-    private int elevation;
+    private Integer elevation;
+    // TODO the DB has many rows where this field is null, which doesn't work for a primative type
+    // TODO do we leverage auto boxing and change it to an Integer object?
 
     /**
      * The code for the continent where the airport is (primarily) located.

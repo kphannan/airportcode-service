@@ -3,15 +3,21 @@ package com.airline.locationservice.persistence.model;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-@Converter
-public class UriConverter implements AttributeConverter<URI, String> {
+import lombok.extern.log4j.Log4j2;
 
+/**
+ * Map a URI to a form suitable for storing in a database or in JSON.
+ */
+ @Converter
+@Log4j2
+public class UriConverter implements AttributeConverter<URI, String>
+{
     @Override
-    public String convertToDatabaseColumn(URI uri) {
+    public String convertToDatabaseColumn( final URI uri )
+    {
         // StringBuilder sb = new StringBuilder();
         // sb.append(color.getRed()).append(SEPARATOR)
         // .append(color.getGreen())
@@ -23,15 +29,17 @@ public class UriConverter implements AttributeConverter<URI, String> {
     }
 
     @Override
-    public URI convertToEntityAttribute(String dbData) {
-        // TODO Auto-generated method stub
-        try {
-            URI uri = new URI(dbData);
-            return uri;
-        } catch (URISyntaxException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+    public URI convertToEntityAttribute( final String dbData )
+    {
+        try
+        {
+            return new URI( dbData );
         }
+        catch ( URISyntaxException e )
+        {
+            log.error( () -> String.format( "Error converting '%s' to a URI", dbData ), e );
+        }
+
         return null;
     }
 }

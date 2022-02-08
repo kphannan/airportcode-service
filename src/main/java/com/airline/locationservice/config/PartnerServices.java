@@ -1,24 +1,25 @@
 package com.airline.locationservice.config;
 
 import java.util.List;
-
 import javax.annotation.PostConstruct;
 
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
-import lombok.Data;
-// import lombok.Value;
-import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
-import lombok.AccessLevel;
+
+
+
 
 /**
  * This is the partner service configuration.
  *
  */
-@ConfigurationProperties(prefix = "partner-services")
+@ConfigurationProperties( prefix = "partner-services" )
 @Component
 @RefreshScope
 @Data
@@ -33,14 +34,15 @@ public class PartnerServices
 
 
     @PostConstruct
-    private void init()
+    private void init() // NOPMD
     {
         // Build out the transient elements....
         if ( null != soapServices )
         {
-            soapServices.forEach(svc -> {
-                svc.uri = (svc.certificate == null ? "http://" : "https://") + svc.host + ":" + svc.port;
-            });
+            soapServices.forEach( svc ->
+            {
+                svc.uri = ( svc.certificate == null ? "http://" : "https://" ) + svc.host + ":" + svc.port;
+            } );
         }
 
         log.info( "----- Examine the parter service list -----" );
@@ -62,10 +64,10 @@ public class PartnerServices
 
 
     /**
-     *
+     * Address elements for connection to a partner REST service.
      */
     @Data
-    @Setter(AccessLevel.MODULE)
+    @Setter( AccessLevel.MODULE )
     public static class ServiceInfo
     {
         private String       name;
@@ -75,31 +77,31 @@ public class PartnerServices
     }
 
     /**
-     *
+     * Address elements for connection to a partner SOAP service.
      */
     @Data
     public static class SoapServiceInfo
     {
-        @Setter(AccessLevel.MODULE)
+        @Setter( AccessLevel.MODULE )
         private String          name;           //< Name of the service
-        @Setter(AccessLevel.MODULE)
+        @Setter( AccessLevel.MODULE )
         private String          host;           //< host only of the URL
-        @Setter(AccessLevel.MODULE)
+        @Setter( AccessLevel.MODULE )
         private String          port;           //< port number
-        @Setter(AccessLevel.MODULE)
+        @Setter( AccessLevel.MODULE )
         private CertificateInfo certificate;    //< Optional certificate keystore
-        @Setter(AccessLevel.MODULE)
+        @Setter( AccessLevel.MODULE )
         private ClientPolicy    clientPolicy;   //< Optional policy details (timeouts, retries, etc.)
 
-        @Setter(AccessLevel.NONE)
-        private transient String uri;           //< Constructed URI from host, port, certificate details
+        @Setter( AccessLevel.NONE )
+        private String uri;                     //< Constructed URI from host, port, certificate details
     }
 
     /**
-     *
+     * Security credentials.
      */
     @Data
-    @Setter(AccessLevel.MODULE)
+    @Setter( AccessLevel.MODULE )
     public static class CertificateInfo
     {
         private String    keystoreFilename;     //< filename (no path) of the keystore
@@ -108,10 +110,10 @@ public class PartnerServices
     }
 
     /**
-     *
+     * Partner connection error handling configuration.
      */
     @Data
-    @Setter(AccessLevel.MODULE)
+    @Setter( AccessLevel.MODULE )
     public static class ClientPolicy
     {
         private int      connectTimeout;    //< max milliseconds to establish a connection

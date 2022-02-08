@@ -95,7 +95,7 @@
       <property name="tokens"
                value="CLASS_DEF, METHOD_DEF, CTOR_DEF, LITERAL_FOR, LITERAL_WHILE, STATIC_INIT,
                     INSTANCE_INIT, ANNOTATION_DEF, ENUM_DEF, INTERFACE_DEF, RECORD_DEF,
-                    LITERAL_CATCH, LITERAL_TRY, 
+                    LITERAL_CATCH, LITERAL_TRY,
                     COMPACT_CTOR_DEF"/>
     </module>
     <module name="SuppressionXpathSingleFilter">
@@ -278,7 +278,7 @@
       <property name="ignoreFinal" value="false"/>
       <property name="allowedAbbreviationLength" value="3"/>
       <property name="tokens"
-               value="CLASS_DEF, INTERFACE_DEF, 
+               value="CLASS_DEF, INTERFACE_DEF,
                     METHOD_DEF,
                     PARAMETER_DEF, VARIABLE_DEF, PATTERN_VARIABLE_DEF"/>
     </module>
@@ -289,7 +289,7 @@
     <module name="CustomImportOrder">
       <property name="sortImportsInGroupAlphabetically" value="true"/>
       <property name="separateLineBetweenGroups" value="true"/>
-      <property name="customImportOrderRules" value="STATIC###THIRD_PARTY_PACKAGE"/>
+      <property name="customImportOrderRules" value="STATIC###STANDARD_JAVA_PACKAGE###THIRD_PARTY_PACKAGE"/>
       <property name="tokens" value="IMPORT, STATIC_IMPORT, PACKAGE_DEF"/>
     </module>
     <module name="MethodParamPad">
